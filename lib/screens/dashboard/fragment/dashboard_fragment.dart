@@ -20,6 +20,10 @@ import 'package:hands_user_app/screens/dashboard/component/jobs_type_widget.dart
 import 'package:hands_user_app/screens/dashboard/component/service_list_component.dart';
 import 'package:hands_user_app/screens/dashboard/component/slider_and_location_component.dart';
 import 'package:hands_user_app/screens/dashboard/component/welcome_user.dart';
+import 'package:hands_user_app/screens/dashboard/fragment/Custom_TopEarnerMonth.dart';
+import 'package:hands_user_app/screens/dashboard/fragment/Custom_TopEarnerWeek.dart';
+import 'package:hands_user_app/screens/dashboard/fragment/Custombooking_Container.dart';
+import 'package:hands_user_app/screens/dashboard/fragment/Total_Rev_Graph.dart';
 import 'package:hands_user_app/screens/dashboard/shimmer/dashboard_shimmer.dart';
 import 'package:hands_user_app/screens/jobRequest/components/my_post_request_item_component.dart';
 import 'package:hands_user_app/screens/jobRequest/create_post_request_screen.dart';
@@ -817,6 +821,13 @@ class _DashboardFragmentState extends State<DashboardFragment> {
                         ),
                       ),
                     ),
+                    custombookingContainer(context),
+                    customTopearnerWeek(context),
+                    customTopearnerMonth(context),
+                    Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: TotalRevenueWidget(),
+                    ),
                     // Column(
                     //   children: [
                     //     // Urgent jobs
@@ -1107,7 +1118,7 @@ class _DashboardFragmentState extends State<DashboardFragment> {
                     //       );
                     //     },
                     //   ),
-                    120.height,
+                    20.height,
                   ],
                 );
               });

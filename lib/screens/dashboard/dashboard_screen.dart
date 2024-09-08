@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/widgets.dart';
 import 'package:hands_user_app/main.dart';
 import 'package:hands_user_app/screens/auth/sign_in_screen.dart';
@@ -211,22 +212,36 @@ class _DashboardScreenState extends State<DashboardScreen> {
   List<PersistentTabConfig> _navBarsItems() {
     return [
       PersistentTabConfig(
-          screen: DashboardFragment(),
-          item: ItemConfig(
-            icon: Icon(Iconsax.home),
-            title: language.home,
-            activeForegroundColor: Colors.white,
-            inactiveForegroundColor: grey,
-          )),
+        screen: DashboardFragment(),
+        item: ItemConfig(
+          icon: Icon(Iconsax.home),
+          title: language.home,
+          activeForegroundColor: Colors.white,
+          inactiveForegroundColor: grey,
+        ),
+      ),
       PersistentTabConfig(
+        onSelectedTabPressWhenNoScreensPushed: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => Observer(
+                      builder: (context) => appStore.isLoggedIn
+                          ? BookingFragment()
+                          : SignInScreen(isFromDashboard: true))));
+        },
         screen: Observer(
             builder: (context) => appStore.isLoggedIn
                 ? BookingFragment()
                 : SignInScreen(isFromDashboard: true)),
         item: ItemConfig(
-          icon: Image.asset(
-            'assets/ic_logo.png',
+          icon: Icon(
+            Icons.abc,
+            color: primaryColor,
           ),
+          // icon: Image.asset(
+          //   'assets/ic_logo.png',
+          // ),
           //title: language.booking,
           title: " ",
           activeForegroundColor: primaryColor,
@@ -438,7 +453,17 @@ class _DashboardScreenState extends State<DashboardScreen> {
               ],
               // padding: EdgeInsets.all(10)
             )),
-        onTabChanged: (value) {},
+        onTabChanged: (value) {
+          if (value == 1) {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => Observer(
+                        builder: (context) => appStore.isLoggedIn
+                            ? BookingFragment()
+                            : SignInScreen(isFromDashboard: true))));
+          }
+        },
         // floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
         floatingActionButton: customFloatingActionButton(context),
       );
