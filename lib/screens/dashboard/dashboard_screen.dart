@@ -222,8 +222,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
       ),
       PersistentTabConfig(
         screen: Observer(
-            builder: (context) =>
-                appStore.isLoggedIn ? BookingFragment() : DashboardFragment()),
+            builder: (context) => appStore.isLoggedIn
+                ? BookingFragment()
+                : SignInScreen(isFromDashboard: true)),
         item: ItemConfig(
           icon: Icon(
             Icons.abc,

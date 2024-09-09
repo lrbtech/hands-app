@@ -61,8 +61,15 @@ class ChangePasswordScreenState extends State<ChangePasswordScreen> {
       await changeUserPassword(request).then((res) async {
         toast(res.message.validate());
         await setValue(USER_PASSWORD, newPasswordCont.text);
-
-        DashboardScreen().launch(context, isNewTask: true, pageRouteAnimation: PageRouteAnimation.Fade);
+        Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
+          MaterialPageRoute(
+            builder: (BuildContext context) {
+              return DashboardScreen();
+            },
+          ),
+          (_) => false,
+        );
+        // DashboardScreen().launch(context, isNewTask: true, pageRouteAnimation: PageRouteAnimation.Fade);
       }).catchError((e) {
         toast(e.toString(), print: true);
       });
@@ -88,8 +95,10 @@ class ChangePasswordScreenState extends State<ChangePasswordScreen> {
                 controller: oldPasswordCont,
                 focus: oldPasswordFocus,
                 nextFocus: newPasswordFocus,
-                suffixPasswordVisibleWidget: ic_show.iconImage(size: 10).paddingAll(14),
-                suffixPasswordInvisibleWidget: ic_hide.iconImage(size: 10).paddingAll(14),
+                suffixPasswordVisibleWidget:
+                    ic_show.iconImage(size: 10).paddingAll(14),
+                suffixPasswordInvisibleWidget:
+                    ic_hide.iconImage(size: 10).paddingAll(14),
                 decoration: inputDecoration(
                   context,
                   labelText: language.hintOldPasswordTxt,
@@ -101,17 +110,22 @@ class ChangePasswordScreenState extends State<ChangePasswordScreen> {
                 controller: newPasswordCont,
                 focus: newPasswordFocus,
                 nextFocus: reenterPasswordFocus,
-                suffixPasswordVisibleWidget: ic_show.iconImage(size: 10).paddingAll(14),
-                suffixPasswordInvisibleWidget: ic_hide.iconImage(size: 10).paddingAll(14),
-                decoration: inputDecoration(context, labelText: language.hintNewPasswordTxt),
+                suffixPasswordVisibleWidget:
+                    ic_show.iconImage(size: 10).paddingAll(14),
+                suffixPasswordInvisibleWidget:
+                    ic_hide.iconImage(size: 10).paddingAll(14),
+                decoration: inputDecoration(context,
+                    labelText: language.hintNewPasswordTxt),
               ),
               16.height,
               AppTextField(
                 textFieldType: TextFieldType.PASSWORD,
                 controller: reenterPasswordCont,
                 focus: reenterPasswordFocus,
-                suffixPasswordVisibleWidget: ic_show.iconImage(size: 10).paddingAll(14),
-                suffixPasswordInvisibleWidget: ic_hide.iconImage(size: 10).paddingAll(14),
+                suffixPasswordVisibleWidget:
+                    ic_show.iconImage(size: 10).paddingAll(14),
+                suffixPasswordInvisibleWidget:
+                    ic_hide.iconImage(size: 10).paddingAll(14),
                 validator: (v) {
                   if (newPasswordCont.text != v) {
                     return language.passwordNotMatch;
@@ -125,7 +139,8 @@ class ChangePasswordScreenState extends State<ChangePasswordScreen> {
                     changePassword();
                   });
                 },
-                decoration: inputDecoration(context, labelText: language.hintReenterPasswordTxt),
+                decoration: inputDecoration(context,
+                    labelText: language.hintReenterPasswordTxt),
               ),
               24.height,
               AppButton(
