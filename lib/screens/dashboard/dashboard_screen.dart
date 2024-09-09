@@ -221,15 +221,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
         ),
       ),
       PersistentTabConfig(
-        onSelectedTabPressWhenNoScreensPushed: () {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => Observer(
-                      builder: (context) => appStore.isLoggedIn
-                          ? BookingFragment()
-                          : SignInScreen(isFromDashboard: true))));
-        },
         screen: Observer(
             builder: (context) =>
                 appStore.isLoggedIn ? BookingFragment() : DashboardFragment()),

@@ -48,7 +48,7 @@ class _BookingFragmentState extends State<BookingFragment> {
         setStatusBarColor(context.primaryColor);
       }
     });
-
+    finish(context);
     LiveStream().on(LIVESTREAM_UPDATE_BOOKING_LIST, (p0) {
       page = 1;
       appStore.setLoading(true);
@@ -61,7 +61,8 @@ class _BookingFragmentState extends State<BookingFragment> {
   }
 
   void init({String status = ''}) async {
-    future = getBookingList(page, status: status, bookings: bookings, lastPageCallback: (b) {
+    future = getBookingList(page, status: status, bookings: bookings,
+        lastPageCallback: (b) {
       isLastPage = b;
     });
   }
@@ -105,13 +106,22 @@ class _BookingFragmentState extends State<BookingFragment> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Expanded(
-                          child: cachedBookingStatusDropdown == null || (cachedBookingStatusDropdown?.where((element) => element.isSelected).isEmpty ?? false)
+                          child: cachedBookingStatusDropdown == null ||
+                                  (cachedBookingStatusDropdown
+                                          ?.where(
+                                              (element) => element.isSelected)
+                                          .isEmpty ??
+                                      false)
                               ? Text(
                                   language.lblAll,
                                   style: boldTextStyle(),
                                 )
                               : Text(
-                                  cachedBookingStatusDropdown.validate().where((element) => element.isSelected).map((e) => e.label).join(' , '),
+                                  cachedBookingStatusDropdown
+                                      .validate()
+                                      .where((element) => element.isSelected)
+                                      .map((e) => e.label)
+                                      .join(' , '),
                                   style: boldTextStyle(size: 12),
                                 )),
                       RotatedBox(
@@ -126,7 +136,9 @@ class _BookingFragmentState extends State<BookingFragment> {
                       context: context,
                       isScrollControlled: true,
                       isDismissible: true,
-                      shape: RoundedRectangleBorder(borderRadius: radiusOnly(topLeft: defaultRadius, topRight: defaultRadius)),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: radiusOnly(
+                              topLeft: defaultRadius, topRight: defaultRadius)),
                       builder: (_) {
                         return BookingStatusFilterBottomSheet();
                       },
@@ -140,7 +152,8 @@ class _BookingFragmentState extends State<BookingFragment> {
                       init(status: res);
 
                       if (bookings.isNotEmpty) {
-                        scrollController.animateTo(0, duration: 1.seconds, curve: Curves.easeOutQuart);
+                        scrollController.animateTo(0,
+                            duration: 1.seconds, curve: Curves.easeOutQuart);
                       } else {
                         scrollController = ScrollController();
                         keyForList = UniqueKey();
@@ -176,19 +189,24 @@ class _BookingFragmentState extends State<BookingFragment> {
                             key: keyForList,
                             controller: scrollController,
                             physics: AlwaysScrollableScrollPhysics(),
-                            padding: EdgeInsets.only(bottom: 60, top: 16, right: 16, left: 16),
+                            padding: EdgeInsets.only(
+                                bottom: 60, top: 16, right: 16, left: 16),
                             itemCount: list.length,
                             shrinkWrap: true,
                             disposeScrollController: true,
                             listAnimationType: ListAnimationType.FadeIn,
-                            fadeInConfiguration: FadeInConfiguration(duration: 2.seconds),
-                            slideConfiguration: SlideConfiguration(verticalOffset: 400),
+                            fadeInConfiguration:
+                                FadeInConfiguration(duration: 2.seconds),
+                            slideConfiguration:
+                                SlideConfiguration(verticalOffset: 400),
                             itemBuilder: (_, index) {
                               BookingData? data = list[index];
 
                               return GestureDetector(
                                 onTap: () {
-                                  BookingDetailScreen(bookingId: data.id.validate()).launch(context);
+                                  BookingDetailScreen(
+                                          bookingId: data.id.validate())
+                                      .launch(context);
                                 },
                                 child: BookingItemComponent(bookingData: data),
                               );
@@ -216,11 +234,13 @@ class _BookingFragmentState extends State<BookingFragment> {
                             Positioned.fill(
                               child: Center(
                                 child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
                                   children: [
                                     NoDataWidget(
                                       titleTextStyle: boldTextStyle(size: 18),
-                                      subTitleTextStyle: primaryTextStyle(size: 14),
+                                      subTitleTextStyle:
+                                          primaryTextStyle(size: 14),
                                       // fit: BoxFit.fill,
                                       title: language.lblNoBookingsFound,
                                       subTitle: language.noBookingSubTitle,
@@ -239,7 +259,8 @@ class _BookingFragmentState extends State<BookingFragment> {
                 50.height
               ],
             ),
-            Observer(builder: (_) => LoaderWidget().visible(appStore.isLoading)),
+            Observer(
+                builder: (_) => LoaderWidget().visible(appStore.isLoading)),
           ],
         ),
       ),

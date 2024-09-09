@@ -14,7 +14,7 @@
     
 
     <application
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/launcher_icon"
         android:label="Hands UAE"
         android:requestLegacyExternalStorage="true"
         tools:replace="android:label"
