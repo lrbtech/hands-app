@@ -49,7 +49,7 @@ Widget customFloatingActionButton(BuildContext context) {
         shape: const CircleBorder(),
         child: ClipOval(
           child: Image.asset(
-            'assets/icons/ic_logo.png',
+            'assets/logo_large.png',
             fit: BoxFit.cover,
             width: 190,
             height: 190,

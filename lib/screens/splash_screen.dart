@@ -27,7 +27,9 @@ class _SplashScreenState extends State<SplashScreen> {
 
   _videoDisplay() {
     initFirebaseMessaging();
-    _videoController = VideoPlayerController.asset("assets/images/splash_video.MP4", videoPlayerOptions: VideoPlayerOptions(mixWithOthers: true));
+    _videoController = VideoPlayerController.asset(
+        "assets/images/splash_video.MP4",
+        videoPlayerOptions: VideoPlayerOptions(mixWithOthers: true));
     videoCompleted = false;
 
     _initVideoFuture = _videoController.initialize().then((value) {
@@ -40,7 +42,9 @@ class _SplashScreenState extends State<SplashScreen> {
         log("video Error Stop");
         init();
       } else {
-        if (_videoController.value.isInitialized && !_videoController.value.isPlaying && !open) {
+        if (_videoController.value.isInitialized &&
+            !_videoController.value.isPlaying &&
+            !open) {
           open = true;
           videoCompleted = true;
           // Future.delayed(Duration(seconds: 6), () async {
@@ -67,29 +71,38 @@ class _SplashScreenState extends State<SplashScreen> {
     // initFirebaseMessaging();
 
     afterBuildCreated(() async {
-      setStatusBarColor(Colors.transparent, statusBarBrightness: Brightness.dark, statusBarIconBrightness: appStore.isDarkMode ? Brightness.light : Brightness.dark);
+      setStatusBarColor(Colors.transparent,
+          statusBarBrightness: Brightness.dark,
+          statusBarIconBrightness:
+              appStore.isDarkMode ? Brightness.light : Brightness.dark);
 
       ///Set app configurations
       await getAppConfigurations().then((value) {}).catchError((e) {
         log(e);
       });
 
-      await appStore.setLanguage(getStringAsync(SELECTED_LANGUAGE_CODE, defaultValue: DEFAULT_LANGUAGE));
+      await appStore.setLanguage(getStringAsync(SELECTED_LANGUAGE_CODE,
+          defaultValue: DEFAULT_LANGUAGE));
 
-      int themeModeIndex = getIntAsync(THEME_MODE_INDEX, defaultValue: THEME_MODE_SYSTEM);
+      int themeModeIndex =
+          getIntAsync(THEME_MODE_INDEX, defaultValue: THEME_MODE_SYSTEM);
       if (themeModeIndex == THEME_MODE_SYSTEM) {
-        appStore.setDarkMode(MediaQuery.of(context).platformBrightness == Brightness.dark);
+        appStore.setDarkMode(
+            MediaQuery.of(context).platformBrightness == Brightness.dark);
       }
 
       await 500.milliseconds.delay;
 
       if (otherSettingStore.maintenanceModeEnable.getBoolInt()) {
-        MaintenanceModeScreen().launch(context, isNewTask: true, pageRouteAnimation: PageRouteAnimation.Fade);
+        MaintenanceModeScreen().launch(context,
+            isNewTask: true, pageRouteAnimation: PageRouteAnimation.Fade);
       } else {
         if (getBoolAsync(IS_FIRST_TIME, defaultValue: true)) {
-          WalkThroughScreen().launch(context, isNewTask: true, pageRouteAnimation: PageRouteAnimation.Fade);
+          WalkThroughScreen().launch(context,
+              isNewTask: true, pageRouteAnimation: PageRouteAnimation.Fade);
         } else {
-          DashboardScreen().launch(context, isNewTask: true, pageRouteAnimation: PageRouteAnimation.Fade);
+          DashboardScreen().launch(context,
+              isNewTask: true, pageRouteAnimation: PageRouteAnimation.Fade);
         }
       }
     });
@@ -106,7 +119,8 @@ class _SplashScreenState extends State<SplashScreen> {
       body: FutureBuilder(
         future: _initVideoFuture,
         builder: (context, snapshot) {
-          if (!snapshot.hasError && snapshot.connectionState == ConnectionState.done) {
+          if (!snapshot.hasError &&
+              snapshot.connectionState == ConnectionState.done) {
             return FittedBox(
               fit: BoxFit.contain,
               child: Container(
@@ -130,7 +144,7 @@ class _SplashScreenState extends State<SplashScreen> {
                         children: [
                           SizedBox(),
                           Image.asset(
-                            "assets/ic_app_logo.png",
+                            "assets/logo_large.png",
                             height: 200,
                           ),
                           AnimatedTextKit(

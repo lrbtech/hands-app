@@ -1,14 +1,16 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hands_user_app/screens/provider/Colors.dart';
 
-Widget customDialogContainer({
-  required BuildContext context,
-  required String title,
-  required String description,
-  required String imagePath,
-  required String buttonText,
-}) {
+Widget customDialogContainer(
+    {required BuildContext context,
+    required String title,
+    required String description,
+    required String imagePath,
+    required String buttonText,
+    bool? network}) {
   return Padding(
     padding: const EdgeInsets.only(top: 15, left: 15, right: 15, bottom: 5),
     child: Container(
@@ -54,7 +56,9 @@ Widget customDialogContainer({
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Image.asset(imagePath),
+                network == true
+                    ? Image.file(File(imagePath))
+                    : Image.asset(imagePath),
                 Text(
                   buttonText,
                   style: GoogleFonts.almarai(

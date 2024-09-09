@@ -6,6 +6,8 @@ import 'package:hands_user_app/screens/provider/Widgets/Custom_Textfield.dart';
 import 'package:hands_user_app/screens/provider/Widgets/Dailog_Container.dart';
 import 'package:hands_user_app/screens/provider/Widgets/Image_Urls.dart';
 import 'package:hands_user_app/screens/provider/Widgets/Title_Text.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:nb_utils/nb_utils.dart';
 
 class ResidentPage extends StatefulWidget {
   ResidentPage({super.key, required void Function() onNext});
@@ -24,6 +26,49 @@ class _ResidentPageState extends State<ResidentPage> {
     super.dispose();
   }
 
+  final ImagePicker _picker = ImagePicker();
+  XFile? uploadEmiratesId;
+  captureFiles() async {
+    _picker
+        .pickImage(
+      source: ImageSource.gallery,
+    )
+        .then((XFile? recordedVideo) {
+      if (recordedVideo != null && recordedVideo.path != null) {
+        setState(() {
+          uploadEmiratesId = recordedVideo;
+        });
+      }
+    });
+  }
+
+  List professional = [
+    "Painter",
+    "Carpenter",
+    "Driver",
+    "Ac Mechanic",
+    "Car Mechanic",
+    "Plumper",
+    "Electrician",
+    "Engineer",
+    "Designer",
+    "Architect",
+    "IT Technician",
+    "Cook"
+  ];
+  List emirates = [
+    "Dubai",
+    "Abu Dhabi",
+    "Sharjah",
+    "Ajman",
+    "Umm Al Quwain",
+    "Ras Al Khaimah",
+    "Fujairah"
+  ];
+  String? emirate;
+  bool error_emirate = false;
+  bool error_pro = false;
+  String? select_pro;
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? pickedDate = await showDatePicker(
       context: context,
@@ -48,37 +93,148 @@ class _ResidentPageState extends State<ResidentPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            heading(context: context, text: "Choose Profession"),
-            customTextField(
-              context: context,
-              hintText: "Select Emirates",
-              assets1: "",
-              assets2: AppIcons.dropdownIcon,
-              obscureText: false,
+            10.height,
+            heading(context: context, text: "Choose Professional"),
+            Padding(
+              padding: const EdgeInsets.only(top: 0, left: 15, right: 15),
+              child: Stack(
+                children: <Widget>[
+                  Container(
+                    height: 62.0,
+                    padding: EdgeInsets.only(left: 50.0, right: 16.0),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      border: Border.all(
+                          color:
+                              error_pro ? Colors.pinkAccent : Color(0xff323345),
+                          width: 1.0),
+                      borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                    ),
+                    child: DropdownButtonHideUnderline(
+                      child: DropdownButton(
+                        hint: Padding(
+                          padding: const EdgeInsets.only(right: 20.0),
+                          child: Text("Select Professional",
+                              style: TextStyle(color: Colors.grey)),
+                        ),
+                        dropdownColor: Colors.white,
+                        elevation: 2,
+                        //icon: Icon(Icons.arrow_drop_down),
+                        iconSize: 36.0,
+                        isExpanded: true,
+                        value: select_pro,
+                        onChanged: (value) {
+                          setState(() {
+                            select_pro = value;
+                          });
+                        },
+                        items: professional.map<DropdownMenuItem>((value) {
+                          return DropdownMenuItem(
+                            value: value,
+                            child: Padding(
+                              padding: const EdgeInsets.only(right: 20.0),
+                              child: Text("${value}",
+                                  style: TextStyle(color: Colors.black)),
+                            ),
+                          );
+                        }).toList(),
+                      ),
+                    ),
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(top: 15.0, left: 10.0),
+                    child: Icon(
+                      Icons.person,
+                      color: Colors.black,
+                      size: 30.0,
+                    ),
+                  ),
+                ],
+              ),
             ),
+            10.height,
             heading(context: context, text: "Choose Emirates"),
-            customTextField(
-              context: context,
-              hintText: "Select Profession",
-              assets1: "",
-              assets2: AppIcons.dropdownIcon,
-              obscureText: false,
+            Padding(
+              padding: const EdgeInsets.only(top: 0, left: 15, right: 15),
+              child: Stack(
+                children: <Widget>[
+                  Container(
+                    height: 62.0,
+                    padding: EdgeInsets.only(left: 50.0, right: 16.0),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      border: Border.all(
+                          color: error_emirate
+                              ? Colors.pinkAccent
+                              : Color(0xff323345),
+                          width: 1.0),
+                      borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                    ),
+                    child: DropdownButtonHideUnderline(
+                      child: DropdownButton(
+                        hint: Padding(
+                          padding: const EdgeInsets.only(right: 20.0),
+                          child: Text("Select Emirates",
+                              style: TextStyle(color: Colors.grey)),
+                        ),
+                        dropdownColor: Colors.white,
+                        elevation: 2,
+                        //icon: Icon(Icons.arrow_drop_down),
+                        iconSize: 36.0,
+                        isExpanded: true,
+                        value: emirate,
+                        onChanged: (value) {
+                          setState(() {
+                            emirate = value;
+                          });
+                        },
+                        items: emirates.map<DropdownMenuItem>((value) {
+                          return DropdownMenuItem(
+                            value: value,
+                            child: Padding(
+                              padding: const EdgeInsets.only(right: 20.0),
+                              child: Text("${value}",
+                                  style: TextStyle(color: Colors.black)),
+                            ),
+                          );
+                        }).toList(),
+                      ),
+                    ),
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(top: 15.0, left: 10.0),
+                    child: Icon(
+                      Icons.location_on,
+                      color: Colors.black,
+                      size: 30.0,
+                    ),
+                  ),
+                ],
+              ),
             ),
             heading(context: context, text: "Emirates ID NO."),
             customTextField(
               context: context,
               hintText: "00-0000-0000000-0",
               assets1: "",
-              assets2: AppIcons.dropdownIcon,
+              // assets2: AppIcons.dropdownIcon,
               obscureText: false,
             ),
-            customDialogContainer(
-                context: context,
-                title: "Upload Emirates ID",
-                description:
-                    "Upload your scope of work images.\nOr use camera to capture them.",
-                imagePath: AppIcons.browseIcon,
-                buttonText: "Brows images"),
+            GestureDetector(
+              onTap: () {
+                captureFiles();
+              },
+              child: customDialogContainer(
+                  context: context,
+                  title: "Upload Emirates ID",
+                  description:
+                      "Upload your scope of work images.\nOr use camera to capture them.",
+                  imagePath: uploadEmiratesId != null
+                      ? uploadEmiratesId!.path
+                      : AppIcons.browseIcon,
+                  buttonText: "Brows images",
+                  network: uploadEmiratesId != null ? true : false),
+            ),
             heading(context: context, text: "Gender"),
             genderSelection(
               context: context,

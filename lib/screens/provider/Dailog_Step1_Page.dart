@@ -4,6 +4,9 @@ import 'package:hands_user_app/screens/provider/Utils/Gender_Radio.dart';
 import 'package:hands_user_app/screens/provider/Widgets/Custom_Textfield.dart';
 import 'package:hands_user_app/screens/provider/Widgets/Image_Urls.dart';
 import 'package:hands_user_app/screens/provider/Widgets/Title_Text.dart';
+import 'package:nb_utils/nb_utils.dart';
+
+import 'Widgets/countery.dart';
 
 class Step1 extends StatefulWidget {
   const Step1({
@@ -18,7 +21,24 @@ class Step1 extends StatefulWidget {
 class _Step1State extends State<Step1> {
   final TextEditingController _dobController = TextEditingController();
   String? _selectedGender;
-
+  List professional = [
+    "Painter",
+    "Carpenter",
+    "Driver",
+    "Ac Mechanic",
+    "Car Mechanic",
+    "Plumper",
+    "Electrician",
+    "Engineer",
+    "Designer",
+    "Architect",
+    "IT Technician",
+    "Cook"
+  ];
+  bool error_pro = false;
+  String? select_pro;
+  bool error_country = false;
+  String? select_country;
   @override
   void dispose() {
     _dobController.dispose();
@@ -49,20 +69,125 @@ class _Step1State extends State<Step1> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            heading(context: context, text: "Choose Profession"),
-            customTextField(
-              context: context,
-              hintText: "Choose Profession",
-              assets1: "",
-              obscureText: false,
+            10.height,
+            heading(context: context, text: "Choose Professional"),
+            Padding(
+              padding: const EdgeInsets.only(top: 0, left: 15, right: 15),
+              child: Stack(
+                children: <Widget>[
+                  Container(
+                    height: 62.0,
+                    padding: EdgeInsets.only(left: 50.0, right: 16.0),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      border: Border.all(
+                          color:
+                              error_pro ? Colors.pinkAccent : Color(0xff323345),
+                          width: 1.0),
+                      borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                    ),
+                    child: DropdownButtonHideUnderline(
+                      child: DropdownButton(
+                        hint: Padding(
+                          padding: const EdgeInsets.only(right: 20.0),
+                          child: Text("Select Professional",
+                              style: TextStyle(color: Colors.grey)),
+                        ),
+                        dropdownColor: Colors.white,
+                        elevation: 2,
+                        //icon: Icon(Icons.arrow_drop_down),
+                        iconSize: 36.0,
+                        isExpanded: true,
+                        value: select_pro,
+                        onChanged: (value) {
+                          setState(() {
+                            select_pro = value;
+                          });
+                        },
+                        items: professional.map<DropdownMenuItem>((value) {
+                          return DropdownMenuItem(
+                            value: value,
+                            child: Padding(
+                              padding: const EdgeInsets.only(right: 20.0),
+                              child: Text("${value}",
+                                  style: TextStyle(color: Colors.black)),
+                            ),
+                          );
+                        }).toList(),
+                      ),
+                    ),
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(top: 15.0, left: 10.0),
+                    child: Icon(
+                      Icons.person,
+                      color: Colors.black,
+                      size: 30.0,
+                    ),
+                  ),
+                ],
+              ),
             ),
+            10.height,
             heading(context: context, text: "Choose Nationality"),
-            customTextField(
-                context: context,
-                hintText: "Select Nationality",
-                assets1: "",
-                assets2: AppIcons.dropdownIcon,
-                obscureText: false),
+            Padding(
+              padding: const EdgeInsets.only(top: 0, left: 15, right: 15),
+              child: Stack(
+                children: <Widget>[
+                  Container(
+                    height: 62.0,
+                    padding: EdgeInsets.only(left: 50.0, right: 16.0),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      border: Border.all(
+                          color: error_country
+                              ? Colors.pinkAccent
+                              : Color(0xff323345),
+                          width: 1.0),
+                      borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                    ),
+                    child: DropdownButtonHideUnderline(
+                      child: DropdownButton(
+                        hint: Padding(
+                          padding: const EdgeInsets.only(right: 20.0),
+                          child: Text("Select Nationality",
+                              style: TextStyle(color: Colors.grey)),
+                        ),
+                        dropdownColor: Colors.white,
+                        elevation: 2,
+                        //icon: Icon(Icons.arrow_drop_down),
+                        iconSize: 36.0,
+                        isExpanded: true,
+                        value: select_country,
+                        onChanged: (value) {
+                          setState(() {
+                            select_country = value;
+                          });
+                        },
+                        items: country.map<DropdownMenuItem>((value) {
+                          return DropdownMenuItem(
+                            value: value,
+                            child: Padding(
+                              padding: const EdgeInsets.only(right: 20.0),
+                              child: Text("${value}",
+                                  style: TextStyle(color: Colors.black)),
+                            ),
+                          );
+                        }).toList(),
+                      ),
+                    ),
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(top: 15.0, left: 10.0),
+                    child: Icon(
+                      Icons.person,
+                      color: Colors.black,
+                      size: 30.0,
+                    ),
+                  ),
+                ],
+              ),
+            ),
             heading(context: context, text: "Passport Number"),
             customTextField(
                 context: context,
