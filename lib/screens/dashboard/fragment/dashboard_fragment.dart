@@ -171,112 +171,114 @@ class _DashboardFragmentState extends State<DashboardFragment> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: [
-          SnapHelperWidget<DashboardResponse>(
-            initialData: cachedDashboardResponse,
-            future: future,
-            errorBuilder: (error) {
-              return NoDataWidget(
-                title: error,
-                imageWidget: ErrorStateWidget(),
-                retryText: language.reload,
-                onRetry: () {
-                  appStore.setLoading(true);
-                  init();
-
-                  setState(() {});
-                },
-              );
-            },
-            loadingWidget: DashboardShimmer(),
-            onSuccess: (snap) {
-              try {
-                snap.slider
-                    ?.removeWhere((element) => element.title == getCurrentOS());
-              } catch (e) {
-                print('no we cant');
-              }
-              return Observer(builder: (context) {
-                return AnimatedScrollView(
-                  physics: ScrollPhysics(),
-                  listAnimationType: ListAnimationType.FadeIn,
-                  fadeInConfiguration: FadeInConfiguration(duration: 2.seconds),
-                  onSwipeRefresh: () async {
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            SnapHelperWidget<DashboardResponse>(
+              initialData: cachedDashboardResponse,
+              future: future,
+              errorBuilder: (error) {
+                return NoDataWidget(
+                  title: error,
+                  imageWidget: ErrorStateWidget(),
+                  retryText: language.reload,
+                  onRetry: () {
                     appStore.setLoading(true);
-
                     init();
-                    setState(() {});
 
-                    return await 2.seconds.delay;
+                    setState(() {});
                   },
-                  children: [
-                    // 40.height,
-                    Container(
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.only(
-                            bottomLeft: Radius.circular(30),
-                            bottomRight: Radius.circular(30),
-                          ),
-                          color: primaryColor,
-                          boxShadow: [
-                            BoxShadow(
-                                color: Colors.white54,
-                                spreadRadius: 0.1,
-                                blurRadius: 3)
-                          ]),
-                      child: Stack(
-                        clipBehavior: Clip.none,
-                        children: [
-                          Container(
-                            width: context.width(),
-                          ),
-                          // Positioned(
-                          //   left: -20,
-                          //   child: WhiteCircle(
-                          //     size: 80,
-                          //   ),
-                          // ),
-                          // Positioned(
-                          //   right: 0,
-                          //   left: 0,
-                          //   top: 70,
-                          //   child: WhiteCircle(
-                          //     size: 60,
-                          //   ),
-                          // ),
-                          // Positioned(
-                          //   left: 0,
-                          //   top: 70,
-                          //   bottom: 40,
-                          //   child: WhiteCircle(
-                          //     size: 60,
-                          //   ),
-                          // ),
-                          // Positioned(
-                          //   right: 40,
-                          //   top: -5,
-                          //   child: WhiteCircle(
-                          //     size: 60,
-                          //   ),
-                          // ),
-                          // Positioned(
-                          //   left: 40,
-                          //   top: 40,
-                          //   bottom: 30,
-                          //   child: WhiteCircle(
-                          //     size: 60,
-                          //   ),
-                          // ),
-                          // Positioned(
-                          //   right: 40,
-                          //   left: 40,
-                          //   bottom: 30,
-                          //   child: WhiteCircle(
-                          //     size: 90,
-                          //   ),
-                          // ),
-                          Padding(
+                );
+              },
+              loadingWidget: DashboardShimmer(),
+              onSuccess: (snap) {
+                try {
+                  snap.slider?.removeWhere(
+                      (element) => element.title == getCurrentOS());
+                } catch (e) {
+                  print('no we cant');
+                }
+                return Observer(builder: (context) {
+                  return AnimatedScrollView(
+                    physics: ScrollPhysics(),
+                    listAnimationType: ListAnimationType.FadeIn,
+                    fadeInConfiguration:
+                        FadeInConfiguration(duration: 2.seconds),
+                    onSwipeRefresh: () async {
+                      appStore.setLoading(true);
+
+                      init();
+                      setState(() {});
+
+                      return await 2.seconds.delay;
+                    },
+                    children: [
+                      // 40.height,
+                      Container(
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.only(
+                              bottomLeft: Radius.circular(30),
+                              bottomRight: Radius.circular(30),
+                            ),
+                            color: primaryColor,
+                            boxShadow: [
+                              BoxShadow(
+                                  color: Colors.white54,
+                                  spreadRadius: 0.1,
+                                  blurRadius: 3)
+                            ]),
+                        child: Stack(
+                          clipBehavior: Clip.none,
+                          children: [
+                            Container(
+                              width: context.width(),
+                            ),
+                            // Positioned(
+                            //   left: -20,
+                            //   child: WhiteCircle(
+                            //     size: 80,
+                            //   ),
+                            // ),
+                            // Positioned(
+                            //   right: 0,
+                            //   left: 0,
+                            //   top: 70,
+                            //   child: WhiteCircle(
+                            //     size: 60,
+                            //   ),
+                            // ),
+                            // Positioned(
+                            //   left: 0,
+                            //   top: 70,
+                            //   bottom: 40,
+                            //   child: WhiteCircle(
+                            //     size: 60,
+                            //   ),
+                            // ),
+                            // Positioned(
+                            //   right: 40,
+                            //   top: -5,
+                            //   child: WhiteCircle(
+                            //     size: 60,
+                            //   ),
+                            // ),
+                            // Positioned(
+                            //   left: 40,
+                            //   top: 40,
+                            //   bottom: 30,
+                            //   child: WhiteCircle(
+                            //     size: 60,
+                            //   ),
+                            // ),
+                            // Positioned(
+                            //   right: 40,
+                            //   left: 40,
+                            //   bottom: 30,
+                            //   child: WhiteCircle(
+                            //     size: 90,
+                            //   ),
+                            // ),
+                            Padding(
                               padding: EdgeInsets.only(top: 40),
                               child: Column(
                                 children: [
@@ -401,732 +403,786 @@ class _DashboardFragmentState extends State<DashboardFragment> {
                                   // CategoryComponent(categoryList: snap.category.validate()),
                                   // 50.height,
                                 ],
-                              )),
-                          // Positioned(
-                          //   bottom: -26,
-                          //   left: 10,
-                          //   right: 10,
-                          //   child: AppButton(
-                          //     onTap: () {
-                          //       toast('URGENT');
-                          //     },
-                          //     padding: EdgeInsets.zero,
-                          //     child: Container(
-                          //       width: context.width(),
-                          //       height: 62,
-                          //       decoration: BoxDecoration(
-                          //         color: context.scaffoldBackgroundColor,
-                          //         borderRadius: BorderRadius.circular(10),
-                          //         boxShadow: [
-                          //           BoxShadow(
-                          //             color: grey.withOpacity(.5),
-                          //             offset: Offset(0, 10),
-                          //             blurRadius: 10,
-                          //           ),
-                          //         ],
-                          //       ),
-                          //       child: Row(
-                          //         children: [
-                          //           30.width,
-                          //           Image.asset(
-                          //             'assets/icons/urgent.png',
-                          //             width: 45,
-                          //             height: 45,
-                          //           ),
-                          //           20.width,
-                          //           Expanded(
-                          //             child: Column(
-                          //               crossAxisAlignment: CrossAxisAlignment.start,
-                          //               mainAxisAlignment: MainAxisAlignment.center,
-                          //               children: [
-                          //                 Text(
-                          //                   appStore.selectedLanguageCode == 'en' ? 'Got an urgent job ?' : 'لديك طلب طارئ ؟',
-                          //                   style: boldTextStyle(),
-                          //                 ),
-                          //                 Text(
-                          //                   appStore.selectedLanguageCode == 'en' ? 'Request urgently hands Now  !' : 'اطلب بسرعة الان',
-                          //                   style: primaryTextStyle(),
-                          //                 ),
-                          //               ],
-                          //             ),
-                          //           )
-                          //         ],
-                          //       ).paddingSymmetric(horizontal: 10),
-                          //     ),
-                          //   ),
-                          // )
-                        ],
-                      ),
-                    ),
-                    10.height,
-
-                    // SizedBox(
-                    //   height: 140,
-                    //   width: double.infinity,
-                    //   child: CarouselSlider(
-                    //     items: snap.slider.validate().map((slider) {
-                    //       return GestureDetector(
-                    //         onTap: () async {
-                    //           print('Type = ${slider.title}');
-                    //           if (slider.title == 'coupon') {
-                    //             await Clipboard.setData(
-                    //                 ClipboardData(text: slider.url ?? ''));
-                    //             ScaffoldMessenger.of(context).showSnackBar(
-                    //               SnackBar(
-                    //                 content: Text(appStore.isArabic
-                    //                     ? 'تم النسخ الى الحافظة'
-                    //                     : 'Copied to clipboard!'),
-                    //               ),
-                    //             );
-                    //           } else {
-                    //             String temp =
-                    //                 parseHtmlString(slider.url.validate());
-                    //             if (temp.startsWith("https") ||
-                    //                 temp.startsWith("http")) {
-                    //               // launchUrlCustomTab(temp.validate());
-                    //               commonLaunchUrl(
-                    //                 temp,
-                    //                 launchMode: LaunchMode.externalApplication,
-                    //               );
-                    //             } else {
-                    //               toast(language.invalidLink);
-                    //             }
-                    //           }
-                    //         },
-                    //         child: Container(
-                    //           width: double.maxFinite,
-                    //           decoration: BoxDecoration(
-                    //             borderRadius: BorderRadius.circular(12),
-                    //             // border: Border.all(color: conte),
-                    //           ),
-                    //           child: Padding(
-                    //             padding: const EdgeInsets.all(8.0),
-                    //             child: ClipRRect(
-                    //               borderRadius: BorderRadius.circular(12),
-                    //               child: Image.network(
-                    //                 slider.sliderImage ?? '',
-                    //                 // sliderList[0]!,
-                    //                 width: double.maxFinite,
-
-                    //                 fit: BoxFit.fill,
-                    //               ),
-                    //             ),
-                    //           ),
-                    //         ),
-                    //       );
-                    //     }).toList(),
-                    //     options: CarouselOptions(
-                    //       // scrollDirection: Axis.vertical,
-                    //       autoPlayInterval: const Duration(seconds: 3),
-                    //       scrollPhysics: const BouncingScrollPhysics(),
-                    //       autoPlay: true,
-                    //       enlargeCenterPage: true,
-                    //       enlargeStrategy: CenterPageEnlargeStrategy.scale,
-                    //       // enlargeFactor: 1,
-                    //       viewportFraction: 0.8,
-                    //     ),
-                    //   ),
-                    // ),
-
-                    // SliderLocationComponent(
-                    //   sliderList: snap.slider.validate(),
-                    //   featuredList: snap.featuredServices.validate(),
-                    //   callback: () async {
-                    //     appStore.setLoading(true);
-
-                    //     init();
-                    //     setState(() {});
-                    //   },
-                    // ),
-                    // Container(
-                    //   height: 500,
-                    //   width: 400,
-                    //   child: VerticalCardPager(
-                    //       titles: titles, // required
-                    //       images: images, // required
-                    //       textStyle: TextStyle(
-                    //           color: Colors.white, fontSize: 10.0, height: 200
-                    //           // fontWeight: FontWeight.bold
-                    //           ), // optional
-                    //       onPageChanged: (page) {
-                    //         // optional
-                    //       },
-                    //       onSelectedItem: (index) {
-                    //         // optional
-                    //       },
-                    //       initialPage: 1, // optional
-                    //       align: ALIGN.CENTER, // optional
-                    //       physics: ClampingScrollPhysics() // optional
-                    //       ),
-                    // ),
-                    // 10.height,
-                    CupertinoPageScaffold(
-                      child:
-                          // Expanded(child: child),
-                          Container(
-                        height: MediaQuery.of(context).size.height * .44,
-                        child: Padding(
-                          padding: const EdgeInsets.only(
-                            left: 25,
-                            right: 25,
-                            top: 50,
-                            bottom: 60,
-                          ),
-                          child: AppinioSwiper(
-                            invertAngleOnBottomDrag: true,
-                            backgroundCardCount: 2,
-                            swipeOptions: const SwipeOptions.all(),
-                            controller: controller,
-                            loop: true,
-                            onCardPositionChanged: (
-                              SwiperPosition position,
-                            ) {
-                              // int length = list.length;
-                              // length = length - 1;
-                              // setState(() {
-                              //   currentState = position.index;
-                              // });
-                              // if (currentState == 3) {
-                              //   setState(() {
-                              //     currentState = 0;
-                              //   });
-                              // } else {
-                              //   setState(() {
-                              //     currentState = position.index + 1;
-                              //   });
-                              // }
-
-                              // debugPrint(
-                              //     'position.index :${position.index} - ${currentState}');
-                              // debugPrint('position1 :${currentState}');
-                              // debugPrint('${position.toString()}'
-                              //     '${position.offset.toAxisDirection()}, '
-                              //     '${position.offset}, '
-                              //     '${position.angle}');
-                            },
-                            onSwipeEnd: (index, num, SwiperActivity) {
-                              setState(() {
-                                currentState = num;
-                              });
-                              debugPrint('onSwipeEnd :${index} - ${num}');
-                            },
-                            // onSwipeEnd: _swipeEnd,
-                            // onEnd: _onEnd,
-                            cardCount: list.length,
-                            cardBuilder: (BuildContext context, int index) {
-                              return Container(
-                                decoration: BoxDecoration(
-                                  color: primaryColor,
-                                  borderRadius: BorderRadius.circular(30),
-                                  boxShadow: [
-                                    BoxShadow(
-                                        color: Colors.white54,
-                                        spreadRadius: 0.1,
-                                        blurRadius: 3)
-                                  ],
-                                  image: DecorationImage(
-                                    image: AssetImage(
-                                        'assets/images/${currentState == index ? list[index]["image"] : 'empty.png'}'),
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
-                                child: Container(
-                                  width: MediaQuery.of(context).size.width,
-                                  child: Stack(
-                                    alignment: AlignmentDirectional.center,
-                                    // mainAxisAlignment:
-                                    //     MainAxisAlignment.spaceAround,
-                                    // crossAxisAlignment:
-                                    //     CrossAxisAlignment.center,
-                                    children: [
-                                      Align(
-                                        alignment: Alignment.topCenter,
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(20.0),
-                                          child: Text(
-                                            textAlign: TextAlign.center,
-                                            "${list[index]["title"]}",
-                                            style: boldTextStyle(
-                                                color: appStore.isDarkMode
-                                                    ? white
-                                                    : context.primaryColor,
-                                                size: 22,
-                                                weight: FontWeight.bold),
-                                          ),
-                                        ),
-                                      ),
-                                      GestureDetector(
-                                        onTap: () {
-                                          if (index == 0) {
-                                            doIfLoggedIn(context, () {
-                                              KeyboardVisibilityProvider(
-                                                child: CreatePostRequestScreen(
-                                                  jobDateType:
-                                                      JobDateType.Today,
-                                                  isUrgent: true,
-                                                ),
-                                              ).launch(context);
-                                            });
-                                          } else if (index == 1) {
-                                            doIfLoggedIn(context, () {
-                                              KeyboardVisibilityProvider(
-                                                child: CreatePostRequestScreen(
-                                                  jobDateType:
-                                                      JobDateType.Today,
-                                                ),
-                                              ).launch(context);
-                                            });
-                                          } else {
-                                            doIfLoggedIn(context, () {
-                                              KeyboardVisibilityProvider(
-                                                child: CreatePostRequestScreen(
-                                                    jobDateType:
-                                                        JobDateType.Scheduled),
-                                              ).launch(context);
-                                            });
-                                          }
-                                        },
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                            color: Colors.white,
-                                            borderRadius:
-                                                BorderRadius.circular(15),
-                                          ),
-                                          child: Padding(
-                                            padding: const EdgeInsets.only(
-                                                top: 10,
-                                                bottom: 10,
-                                                left: 30,
-                                                right: 30),
-                                            child: Text(
-                                                "${list[index]["button"]}",
-                                                style: boldTextStyle(
-                                                    color: Colors.black,
-                                                    size: 14,
-                                                    weight: FontWeight.bold)),
-                                          ),
-                                        ),
-                                      ),
-                                      currentState != index
-                                          ? Positioned(
-                                              bottom: 0,
-                                              child: Container(
-                                                decoration: BoxDecoration(
-                                                  color: list[index]["color"] ==
-                                                          "red"
-                                                      ? Colors.red
-                                                      : list[index]["color"] ==
-                                                              "green"
-                                                          ? Colors.green
-                                                          : Colors.black,
-                                                  borderRadius:
-                                                      BorderRadius.only(
-                                                    topLeft:
-                                                        Radius.circular(30),
-                                                    topRight:
-                                                        Radius.circular(30),
-                                                  ),
-                                                ),
-                                                child: Padding(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          top: 5,
-                                                          bottom: 5,
-                                                          left: 30,
-                                                          right: 30),
-                                                  child: Text(
-                                                      "${list[index]["button"]}",
-                                                      style: boldTextStyle(
-                                                          color: list[index][
-                                                                      "color"] ==
-                                                                  "black"
-                                                              ? Colors.white
-                                                              : Colors.black,
-                                                          size: 10,
-                                                          weight:
-                                                              FontWeight.bold)),
-                                                ),
-                                              ),
-                                            )
-                                          : SizedBox()
-                                    ],
-                                  ),
-                                ),
-                              );
-                            },
-                          ),
-                        ),
-                      ),
-                    ),
-                    10.height,
-                    Padding(
-                      padding: const EdgeInsets.only(
-                          top: 20, bottom: 10, right: 8, left: 8),
-                      child: Container(
-                        width: MediaQuery.of(context).size.width,
-                        height: 100,
-                        decoration: BoxDecoration(
-                          color: primaryColor,
-                          borderRadius: BorderRadius.circular(20),
-                          boxShadow: [
-                            BoxShadow(
-                                color: Colors.white54,
-                                spreadRadius: 0.1,
-                                blurRadius: 3)
+                              ),
+                            ),
+                            // Positioned(
+                            //   bottom: -26,
+                            //   left: 10,
+                            //   right: 10,
+                            //   child: AppButton(
+                            //     onTap: () {
+                            //       toast('URGENT');
+                            //     },
+                            //     padding: EdgeInsets.zero,
+                            //     child: Container(
+                            //       width: context.width(),
+                            //       height: 62,
+                            //       decoration: BoxDecoration(
+                            //         color: context.scaffoldBackgroundColor,
+                            //         borderRadius: BorderRadius.circular(10),
+                            //         boxShadow: [
+                            //           BoxShadow(
+                            //             color: grey.withOpacity(.5),
+                            //             offset: Offset(0, 10),
+                            //             blurRadius: 10,
+                            //           ),
+                            //         ],
+                            //       ),
+                            //       child: Row(
+                            //         children: [
+                            //           30.width,
+                            //           Image.asset(
+                            //             'assets/icons/urgent.png',
+                            //             width: 45,
+                            //             height: 45,
+                            //           ),
+                            //           20.width,
+                            //           Expanded(
+                            //             child: Column(
+                            //               crossAxisAlignment: CrossAxisAlignment.start,
+                            //               mainAxisAlignment: MainAxisAlignment.center,
+                            //               children: [
+                            //                 Text(
+                            //                   appStore.selectedLanguageCode == 'en' ? 'Got an urgent job ?' : 'لديك طلب طارئ ؟',
+                            //                   style: boldTextStyle(),
+                            //                 ),
+                            //                 Text(
+                            //                   appStore.selectedLanguageCode == 'en' ? 'Request urgently hands Now  !' : 'اطلب بسرعة الان',
+                            //                   style: primaryTextStyle(),
+                            //                 ),
+                            //               ],
+                            //             ),
+                            //           )
+                            //         ],
+                            //       ).paddingSymmetric(horizontal: 10),
+                            //     ),
+                            //   ),
+                            // )
                           ],
                         ),
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: 15, right: 15),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                      ),
+                      10.height,
+
+                      // SizedBox(
+                      //   height: 140,
+                      //   width: double.infinity,
+                      //   child: CarouselSlider(
+                      //     items: snap.slider.validate().map((slider) {
+                      //       return GestureDetector(
+                      //         onTap: () async {
+                      //           print('Type = ${slider.title}');
+                      //           if (slider.title == 'coupon') {
+                      //             await Clipboard.setData(
+                      //                 ClipboardData(text: slider.url ?? ''));
+                      //             ScaffoldMessenger.of(context).showSnackBar(
+                      //               SnackBar(
+                      //                 content: Text(appStore.isArabic
+                      //                     ? 'تم النسخ الى الحافظة'
+                      //                     : 'Copied to clipboard!'),
+                      //               ),
+                      //             );
+                      //           } else {
+                      //             String temp =
+                      //                 parseHtmlString(slider.url.validate());
+                      //             if (temp.startsWith("https") ||
+                      //                 temp.startsWith("http")) {
+                      //               // launchUrlCustomTab(temp.validate());
+                      //               commonLaunchUrl(
+                      //                 temp,
+                      //                 launchMode: LaunchMode.externalApplication,
+                      //               );
+                      //             } else {
+                      //               toast(language.invalidLink);
+                      //             }
+                      //           }
+                      //         },
+                      //         child: Container(
+                      //           width: double.maxFinite,
+                      //           decoration: BoxDecoration(
+                      //             borderRadius: BorderRadius.circular(12),
+                      //             // border: Border.all(color: conte),
+                      //           ),
+                      //           child: Padding(
+                      //             padding: const EdgeInsets.all(8.0),
+                      //             child: ClipRRect(
+                      //               borderRadius: BorderRadius.circular(12),
+                      //               child: Image.network(
+                      //                 slider.sliderImage ?? '',
+                      //                 // sliderList[0]!,
+                      //                 width: double.maxFinite,
+
+                      //                 fit: BoxFit.fill,
+                      //               ),
+                      //             ),
+                      //           ),
+                      //         ),
+                      //       );
+                      //     }).toList(),
+                      //     options: CarouselOptions(
+                      //       // scrollDirection: Axis.vertical,
+                      //       autoPlayInterval: const Duration(seconds: 3),
+                      //       scrollPhysics: const BouncingScrollPhysics(),
+                      //       autoPlay: true,
+                      //       enlargeCenterPage: true,
+                      //       enlargeStrategy: CenterPageEnlargeStrategy.scale,
+                      //       // enlargeFactor: 1,
+                      //       viewportFraction: 0.8,
+                      //     ),
+                      //   ),
+                      // ),
+
+                      // SliderLocationComponent(
+                      //   sliderList: snap.slider.validate(),
+                      //   featuredList: snap.featuredServices.validate(),
+                      //   callback: () async {
+                      //     appStore.setLoading(true);
+
+                      //     init();
+                      //     setState(() {});
+                      //   },
+                      // ),
+                      // Container(
+                      //   height: 500,
+                      //   width: 400,
+                      //   child: VerticalCardPager(
+                      //       titles: titles, // required
+                      //       images: images, // required
+                      //       textStyle: TextStyle(
+                      //           color: Colors.white, fontSize: 10.0, height: 200
+                      //           // fontWeight: FontWeight.bold
+                      //           ), // optional
+                      //       onPageChanged: (page) {
+                      //         // optional
+                      //       },
+                      //       onSelectedItem: (index) {
+                      //         // optional
+                      //       },
+                      //       initialPage: 1, // optional
+                      //       align: ALIGN.CENTER, // optional
+                      //       physics: ClampingScrollPhysics() // optional
+                      //       ),
+                      // ),
+                      // 10.height,
+                      Container(
+                        child: SizedBox(
+                          height: MediaQuery.of(context).size.height -
+                              MediaQuery.of(context).size.height * 0.3,
+                          child: ListView(
+                            shrinkWrap: true,
+                            physics: ScrollPhysics(),
                             children: [
-                              Text(
-                                textAlign: TextAlign.center,
-                                "Start Earning Money by Heping People!",
-                                style: boldTextStyle(
-                                    color: appStore.isDarkMode
-                                        ? white
-                                        : context.primaryColor,
-                                    size: 14,
-                                    weight: FontWeight.bold),
+                              CupertinoPageScaffold(
+                                child:
+                                    // Expanded(child: child),
+                                    Container(
+                                  height:
+                                      MediaQuery.of(context).size.height * .44,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(
+                                      left: 25,
+                                      right: 25,
+                                      top: 0,
+                                      bottom: 60,
+                                    ),
+                                    child: AppinioSwiper(
+                                      invertAngleOnBottomDrag: true,
+                                      backgroundCardCount: 2,
+                                      swipeOptions: const SwipeOptions.all(),
+                                      controller: controller,
+                                      loop: true,
+                                      onCardPositionChanged: (
+                                        SwiperPosition position,
+                                      ) {
+                                        // int length = list.length;
+                                        // length = length - 1;
+                                        // setState(() {
+                                        //   currentState = position.index;
+                                        // });
+                                        // if (currentState == 3) {
+                                        //   setState(() {
+                                        //     currentState = 0;
+                                        //   });
+                                        // } else {
+                                        //   setState(() {
+                                        //     currentState = position.index + 1;
+                                        //   });
+                                        // }
+
+                                        // debugPrint(
+                                        //     'position.index :${position.index} - ${currentState}');
+                                        // debugPrint('position1 :${currentState}');
+                                        // debugPrint('${position.toString()}'
+                                        //     '${position.offset.toAxisDirection()}, '
+                                        //     '${position.offset}, '
+                                        //     '${position.angle}');
+                                      },
+                                      onSwipeEnd: (index, num, SwiperActivity) {
+                                        setState(() {
+                                          currentState = num;
+                                        });
+                                        debugPrint(
+                                            'onSwipeEnd :${index} - ${num}');
+                                      },
+                                      // onSwipeEnd: _swipeEnd,
+                                      // onEnd: _onEnd,
+                                      cardCount: list.length,
+                                      cardBuilder:
+                                          (BuildContext context, int index) {
+                                        return Container(
+                                          decoration: BoxDecoration(
+                                            color: primaryColor,
+                                            borderRadius:
+                                                BorderRadius.circular(30),
+                                            boxShadow: [
+                                              BoxShadow(
+                                                  color: Colors.white54,
+                                                  spreadRadius: 0.1,
+                                                  blurRadius: 3)
+                                            ],
+                                            image: DecorationImage(
+                                              image: AssetImage(
+                                                  'assets/images/${currentState == index ? list[index]["image"] : 'empty.png'}'),
+                                              fit: BoxFit.cover,
+                                            ),
+                                          ),
+                                          child: Container(
+                                            width: MediaQuery.of(context)
+                                                .size
+                                                .width,
+                                            child: Stack(
+                                              alignment:
+                                                  AlignmentDirectional.center,
+                                              // mainAxisAlignment:
+                                              //     MainAxisAlignment.spaceAround,
+                                              // crossAxisAlignment:
+                                              //     CrossAxisAlignment.center,
+                                              children: [
+                                                Align(
+                                                  alignment:
+                                                      Alignment.topCenter,
+                                                  child: Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            20.0),
+                                                    child: Text(
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      "${list[index]["title"]}",
+                                                      style: boldTextStyle(
+                                                          color: appStore
+                                                                  .isDarkMode
+                                                              ? white
+                                                              : context
+                                                                  .primaryColor,
+                                                          size: 22,
+                                                          weight:
+                                                              FontWeight.bold),
+                                                    ),
+                                                  ),
+                                                ),
+                                                GestureDetector(
+                                                  onTap: () {
+                                                    if (index == 0) {
+                                                      doIfLoggedIn(context, () {
+                                                        KeyboardVisibilityProvider(
+                                                          child:
+                                                              CreatePostRequestScreen(
+                                                            jobDateType:
+                                                                JobDateType
+                                                                    .Today,
+                                                            isUrgent: true,
+                                                          ),
+                                                        ).launch(context);
+                                                      });
+                                                    } else if (index == 1) {
+                                                      doIfLoggedIn(context, () {
+                                                        KeyboardVisibilityProvider(
+                                                          child:
+                                                              CreatePostRequestScreen(
+                                                            jobDateType:
+                                                                JobDateType
+                                                                    .Today,
+                                                          ),
+                                                        ).launch(context);
+                                                      });
+                                                    } else {
+                                                      doIfLoggedIn(context, () {
+                                                        KeyboardVisibilityProvider(
+                                                          child: CreatePostRequestScreen(
+                                                              jobDateType:
+                                                                  JobDateType
+                                                                      .Scheduled),
+                                                        ).launch(context);
+                                                      });
+                                                    }
+                                                  },
+                                                  child: Container(
+                                                    decoration: BoxDecoration(
+                                                      color: Colors.white,
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              15),
+                                                    ),
+                                                    child: Padding(
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                              top: 10,
+                                                              bottom: 10,
+                                                              left: 30,
+                                                              right: 30),
+                                                      child: Text(
+                                                          "${list[index]["button"]}",
+                                                          style: boldTextStyle(
+                                                              color:
+                                                                  Colors.black,
+                                                              size: 14,
+                                                              weight: FontWeight
+                                                                  .bold)),
+                                                    ),
+                                                  ),
+                                                ),
+                                                currentState != index
+                                                    ? Positioned(
+                                                        bottom: 0,
+                                                        child: Container(
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            color: list[index][
+                                                                        "color"] ==
+                                                                    "red"
+                                                                ? Colors.red
+                                                                : list[index][
+                                                                            "color"] ==
+                                                                        "green"
+                                                                    ? Colors
+                                                                        .green
+                                                                    : Colors
+                                                                        .black,
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .only(
+                                                              topLeft: Radius
+                                                                  .circular(30),
+                                                              topRight: Radius
+                                                                  .circular(30),
+                                                            ),
+                                                          ),
+                                                          child: Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .only(
+                                                                    top: 5,
+                                                                    bottom: 5,
+                                                                    left: 30,
+                                                                    right: 30),
+                                                            child: Text(
+                                                                "${list[index]["button"]}",
+                                                                style: boldTextStyle(
+                                                                    color: list[index]["color"] ==
+                                                                            "black"
+                                                                        ? Colors
+                                                                            .white
+                                                                        : Colors
+                                                                            .black,
+                                                                    size: 10,
+                                                                    weight: FontWeight
+                                                                        .bold)),
+                                                          ),
+                                                        ),
+                                                      )
+                                                    : SizedBox()
+                                              ],
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                ),
                               ),
-                              GestureDetector(
-                                onTap: () {
-                                  showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      return const CustomDialogBox();
-                                    },
-                                  );
-                                },
+                              10.height,
+                              Padding(
+                                padding: const EdgeInsets.only(
+                                    top: 20, bottom: 10, right: 8, left: 8),
                                 child: Container(
+                                  width: MediaQuery.of(context).size.width,
+                                  height: 100,
                                   decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(15),
+                                    color: primaryColor,
+                                    borderRadius: BorderRadius.circular(20),
+                                    boxShadow: [
+                                      BoxShadow(
+                                          color: Colors.white54,
+                                          spreadRadius: 0.1,
+                                          blurRadius: 3)
+                                    ],
                                   ),
                                   child: Padding(
                                     padding: const EdgeInsets.only(
-                                        top: 7, bottom: 7, left: 30, right: 30),
-                                    child: Text("Become a Provider",
-                                        style: boldTextStyle(
-                                            color: Colors.black,
-                                            size: 12,
-                                            weight: FontWeight.bold)),
+                                        left: 15, right: 15),
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          textAlign: TextAlign.center,
+                                          "Start Earning Money by Heping People!",
+                                          style: boldTextStyle(
+                                              color: appStore.isDarkMode
+                                                  ? white
+                                                  : context.primaryColor,
+                                              size: 14,
+                                              weight: FontWeight.bold),
+                                        ),
+                                        GestureDetector(
+                                          onTap: () {
+                                            showDialog(
+                                              context: context,
+                                              builder: (BuildContext context) {
+                                                return const CustomDialogBox();
+                                              },
+                                            );
+                                          },
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                              color: Colors.white,
+                                              borderRadius:
+                                                  BorderRadius.circular(15),
+                                            ),
+                                            child: Padding(
+                                              padding: const EdgeInsets.only(
+                                                  top: 7,
+                                                  bottom: 7,
+                                                  left: 30,
+                                                  right: 30),
+                                              child: Text("Become a Provider",
+                                                  style: boldTextStyle(
+                                                      color: Colors.black,
+                                                      size: 12,
+                                                      weight: FontWeight.bold)),
+                                            ),
+                                          ),
+                                        )
+                                      ],
+                                    ),
                                   ),
                                 ),
-                              )
+                              ),
+                              custombookingContainer(context),
+                              customTopearnerWeek(context),
+                              customTopearnerMonth(context),
+                              Padding(
+                                padding: const EdgeInsets.all(10.0),
+                                child: TotalRevenueWidget(),
+                              ),
                             ],
                           ),
                         ),
                       ),
-                    ),
-                    custombookingContainer(context),
-                    customTopearnerWeek(context),
-                    customTopearnerMonth(context),
-                    Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: TotalRevenueWidget(),
-                    ),
-                    // Column(
-                    //   children: [
-                    //     // Urgent jobs
-                    //     JobsTypeWidget(
-                    //       urgent: true,
-                    //       onPressed: () {
-                    //         doIfLoggedIn(context, () {
-                    //           KeyboardVisibilityProvider(
-                    //             child: CreatePostRequestScreen(
-                    //               jobDateType: JobDateType.Today,
-                    //               isUrgent: true,
-                    //             ),
-                    //           ).launch(context);
-                    //         });
-                    //       },
-                    //     ).paddingSymmetric(horizontal: 10),
-                    //     15.height,
 
-                    //     JobsTypeWidget(
-                    //       today: true,
-                    //       onPressed: () {
-                    //         doIfLoggedIn(context, () {
-                    //           KeyboardVisibilityProvider(
-                    //             child: CreatePostRequestScreen(
-                    //               jobDateType: JobDateType.Today,
-                    //             ),
-                    //           ).launch(context);
-                    //         });
-                    //       },
-                    //     ).paddingSymmetric(horizontal: 10),
+                      // Column(
+                      //   children: [
+                      //     // Urgent jobs
+                      //     JobsTypeWidget(
+                      //       urgent: true,
+                      //       onPressed: () {
+                      //         doIfLoggedIn(context, () {
+                      //           KeyboardVisibilityProvider(
+                      //             child: CreatePostRequestScreen(
+                      //               jobDateType: JobDateType.Today,
+                      //               isUrgent: true,
+                      //             ),
+                      //           ).launch(context);
+                      //         });
+                      //       },
+                      //     ).paddingSymmetric(horizontal: 10),
+                      //     15.height,
 
-                    //     // InkWell(
-                    //     //   borderRadius: BorderRadius.circular(12),
-                    //     //   splashColor: context.cardColor,
-                    //     //   onTap: () {
-                    //     //     doIfLoggedIn(context, () {
-                    //     //       KeyboardVisibilityProvider(
-                    //     //         child: CreatePostRequestScreen(
-                    //     //           jobDateType: JobDateType.Today,
-                    //     //         ),
-                    //     //       ).launch(context);
-                    //     //     });
-                    //     //   },
-                    //     //   child: Container(
-                    //     //     width: context.width(),
-                    //     //     height: 60,
-                    //     //     decoration: BoxDecoration(
-                    //     //       color: primaryColor,
-                    //     //       borderRadius: BorderRadius.circular(12),
-                    //     //       boxShadow: [
-                    //     //         BoxShadow(
-                    //     //           color: Colors.black.withOpacity(.1),
-                    //     //           spreadRadius: 5,
-                    //     //           blurRadius: 10,
-                    //     //           offset: Offset(0, 8),
-                    //     //         ),
-                    //     //       ],
-                    //     //     ),
-                    //     //     child: Row(
-                    //     //       mainAxisAlignment: MainAxisAlignment.center,
-                    //     //       children: [
-                    //     //         // 20.width,
-                    //     //         // Image.asset(
-                    //     //         //   'assets/icons/today.png',
-                    //     //         // ).paddingAll(5),
-                    //     //         // 10.width,
-                    //     //         Text(
-                    //     //           language.today,
-                    //     //           style: boldTextStyle(color: white, size: 20),
-                    //     //         )
-                    //     //       ],
-                    //     //     ).paddingSymmetric(horizontal: 10, vertical: 10),
-                    //     //   ),
-                    //     // ).paddingSymmetric(horizontal: 10),
+                      //     JobsTypeWidget(
+                      //       today: true,
+                      //       onPressed: () {
+                      //         doIfLoggedIn(context, () {
+                      //           KeyboardVisibilityProvider(
+                      //             child: CreatePostRequestScreen(
+                      //               jobDateType: JobDateType.Today,
+                      //             ),
+                      //           ).launch(context);
+                      //         });
+                      //       },
+                      //     ).paddingSymmetric(horizontal: 10),
 
-                    //     15.height,
+                      //     // InkWell(
+                      //     //   borderRadius: BorderRadius.circular(12),
+                      //     //   splashColor: context.cardColor,
+                      //     //   onTap: () {
+                      //     //     doIfLoggedIn(context, () {
+                      //     //       KeyboardVisibilityProvider(
+                      //     //         child: CreatePostRequestScreen(
+                      //     //           jobDateType: JobDateType.Today,
+                      //     //         ),
+                      //     //       ).launch(context);
+                      //     //     });
+                      //     //   },
+                      //     //   child: Container(
+                      //     //     width: context.width(),
+                      //     //     height: 60,
+                      //     //     decoration: BoxDecoration(
+                      //     //       color: primaryColor,
+                      //     //       borderRadius: BorderRadius.circular(12),
+                      //     //       boxShadow: [
+                      //     //         BoxShadow(
+                      //     //           color: Colors.black.withOpacity(.1),
+                      //     //           spreadRadius: 5,
+                      //     //           blurRadius: 10,
+                      //     //           offset: Offset(0, 8),
+                      //     //         ),
+                      //     //       ],
+                      //     //     ),
+                      //     //     child: Row(
+                      //     //       mainAxisAlignment: MainAxisAlignment.center,
+                      //     //       children: [
+                      //     //         // 20.width,
+                      //     //         // Image.asset(
+                      //     //         //   'assets/icons/today.png',
+                      //     //         // ).paddingAll(5),
+                      //     //         // 10.width,
+                      //     //         Text(
+                      //     //           language.today,
+                      //     //           style: boldTextStyle(color: white, size: 20),
+                      //     //         )
+                      //     //       ],
+                      //     //     ).paddingSymmetric(horizontal: 10, vertical: 10),
+                      //     //   ),
+                      //     // ).paddingSymmetric(horizontal: 10),
 
-                    //     JobsTypeWidget(
-                    //       scheduled: true,
-                    //       onPressed: () {
-                    //         doIfLoggedIn(context, () {
-                    //           KeyboardVisibilityProvider(
-                    //             child: CreatePostRequestScreen(
-                    //                 jobDateType: JobDateType.Scheduled),
-                    //           ).launch(context);
-                    //         });
-                    //       },
-                    //     ).paddingSymmetric(horizontal: 10),
-                    //     // InkWell(
-                    //     //   borderRadius: BorderRadius.circular(12),
-                    //     //   onTap: () {
-                    //     //     doIfLoggedIn(context, () {
-                    //     //       KeyboardVisibilityProvider(
-                    //     //         child: CreatePostRequestScreen(jobDateType: JobDateType.Scheduled),
-                    //     //       ).launch(context);
-                    //     //     });
-                    //     //   },
-                    //     //   child: Container(
-                    //     //     width: context.width(),
-                    //     //     height: 60,
-                    //     //     decoration: BoxDecoration(
-                    //     //       color: primaryColor,
-                    //     //       borderRadius: BorderRadius.circular(12),
-                    //     //       boxShadow: [
-                    //     //         BoxShadow(
-                    //     //           color: Colors.black.withOpacity(.1),
-                    //     //           spreadRadius: 5,
-                    //     //           blurRadius: 10,
-                    //     //           offset: Offset(0, 8),
-                    //     //         ),
-                    //     //       ],
-                    //     //     ),
-                    //     //     child: Row(
-                    //     //       mainAxisAlignment: MainAxisAlignment.center,
-                    //     //       children: [
-                    //     //         // 20.width,
-                    //     //         // Image.asset(
-                    //     //         //   'assets/icons/schedule.png',
-                    //     //         // ).paddingAll(5),
-                    //     //         // 10.width,
-                    //     //         Text(
-                    //     //           language.scheduled,
-                    //     //           style: boldTextStyle(color: white, size: 20),
-                    //     //         )
-                    //     //       ],
-                    //     //     ).paddingSymmetric(horizontal: 10, vertical: 10),
-                    //     //   ),
-                    //     // ).paddingSymmetric(horizontal: 10),
+                      //     15.height,
 
-                    //     // 15.height,
-                    //     // InkWell(
-                    //     //   borderRadius: BorderRadius.circular(12),
-                    //     //   onTap: () {
-                    //     //     print('---------------------------------------------------');
-                    //     //     print(appStore.appstoreUrl);
-                    //     //     print(appStore.providerAppstoreUrl);
-                    //     //     print(appStore.playStoreUrl);
-                    //     //     print(appStore.providerPlayStoreUrl);
+                      //     JobsTypeWidget(
+                      //       scheduled: true,
+                      //       onPressed: () {
+                      //         doIfLoggedIn(context, () {
+                      //           KeyboardVisibilityProvider(
+                      //             child: CreatePostRequestScreen(
+                      //                 jobDateType: JobDateType.Scheduled),
+                      //           ).launch(context);
+                      //         });
+                      //       },
+                      //     ).paddingSymmetric(horizontal: 10),
+                      //     // InkWell(
+                      //     //   borderRadius: BorderRadius.circular(12),
+                      //     //   onTap: () {
+                      //     //     doIfLoggedIn(context, () {
+                      //     //       KeyboardVisibilityProvider(
+                      //     //         child: CreatePostRequestScreen(jobDateType: JobDateType.Scheduled),
+                      //     //       ).launch(context);
+                      //     //     });
+                      //     //   },
+                      //     //   child: Container(
+                      //     //     width: context.width(),
+                      //     //     height: 60,
+                      //     //     decoration: BoxDecoration(
+                      //     //       color: primaryColor,
+                      //     //       borderRadius: BorderRadius.circular(12),
+                      //     //       boxShadow: [
+                      //     //         BoxShadow(
+                      //     //           color: Colors.black.withOpacity(.1),
+                      //     //           spreadRadius: 5,
+                      //     //           blurRadius: 10,
+                      //     //           offset: Offset(0, 8),
+                      //     //         ),
+                      //     //       ],
+                      //     //     ),
+                      //     //     child: Row(
+                      //     //       mainAxisAlignment: MainAxisAlignment.center,
+                      //     //       children: [
+                      //     //         // 20.width,
+                      //     //         // Image.asset(
+                      //     //         //   'assets/icons/schedule.png',
+                      //     //         // ).paddingAll(5),
+                      //     //         // 10.width,
+                      //     //         Text(
+                      //     //           language.scheduled,
+                      //     //           style: boldTextStyle(color: white, size: 20),
+                      //     //         )
+                      //     //       ],
+                      //     //     ).paddingSymmetric(horizontal: 10, vertical: 10),
+                      //     //   ),
+                      //     // ).paddingSymmetric(horizontal: 10),
 
-                    //     //     launchUrl(
-                    //     //       Uri.parse(Platform.isIOS ? appStore.providerAppstoreUrl : appStore.providerPlayStoreUrl),
-                    //     //       mode: LaunchMode.externalApplication,
-                    //     //     );
-                    //     //   },
-                    //     //   child: Container(
-                    //     //     width: context.width(),
-                    //     //     height: 60,
-                    //     //     decoration: BoxDecoration(
-                    //     //       color: primaryColor,
-                    //     //       borderRadius: BorderRadius.circular(12),
-                    //     //       boxShadow: [
-                    //     //         BoxShadow(
-                    //     //           color: Colors.black.withOpacity(.1),
-                    //     //           spreadRadius: 5,
-                    //     //           blurRadius: 10,
-                    //     //           offset: Offset(0, 8),
-                    //     //         ),
-                    //     //       ],
-                    //     //     ),
-                    //     //     child: Row(
-                    //     //       children: [
-                    //     //         20.width,
-                    //     //         Expanded(
-                    //     //           flex: 1,
-                    //     //           child: Align(
-                    //     //             alignment: AlignmentDirectional.centerEnd,
-                    //     //             child: Image.asset(
-                    //     //               'assets/ic_app_logo.png',
-                    //     //             ).paddingAll(0),
-                    //     //           ),
-                    //     //         ),
-                    //     //         10.width,
-                    //     //         Expanded(
-                    //     //           flex: 4,
-                    //     //           child: Align(
-                    //     //             alignment: AlignmentDirectional.centerStart,
-                    //     //             child: Text(
-                    //     //               language.wantToGetMoney,
-                    //     //               style: boldTextStyle(
-                    //     //                 color: white,
-                    //     //                 size: appStore.selectedLanguageCode == "en" ? 15 : 18,
-                    //     //               ),
-                    //     //               maxLines: 2,
-                    //     //               textAlign: TextAlign.center,
-                    //     //             ),
-                    //     //           ),
-                    //     //         )
-                    //     //       ],
-                    //     //     ).paddingSymmetric(horizontal: 10, vertical: 10),
-                    //     //   ),
-                    //     // ).paddingSymmetric(horizontal: 10).visible(_makeMoneyVisibilityCondition),
-                    //     // 35.height,
-                    //   ],
-                    // ),
-                    // Column(
-                    //   children: [
-                    //     SliderLocationComponent(
-                    //       sliderList: snap.slider.validate(),
-                    //       featuredList: snap.featuredServices.validate(),
-                    //       callback: () async {
-                    //         appStore.setLoading(true);
+                      //     // 15.height,
+                      //     // InkWell(
+                      //     //   borderRadius: BorderRadius.circular(12),
+                      //     //   onTap: () {
+                      //     //     print('---------------------------------------------------');
+                      //     //     print(appStore.appstoreUrl);
+                      //     //     print(appStore.providerAppstoreUrl);
+                      //     //     print(appStore.playStoreUrl);
+                      //     //     print(appStore.providerPlayStoreUrl);
 
-                    //         init();
-                    //         setState(() {});
-                    //       },
-                    //     ),
-                    //   ],
-                    // ),
-                    // 10.height,
+                      //     //     launchUrl(
+                      //     //       Uri.parse(Platform.isIOS ? appStore.providerAppstoreUrl : appStore.providerPlayStoreUrl),
+                      //     //       mode: LaunchMode.externalApplication,
+                      //     //     );
+                      //     //   },
+                      //     //   child: Container(
+                      //     //     width: context.width(),
+                      //     //     height: 60,
+                      //     //     decoration: BoxDecoration(
+                      //     //       color: primaryColor,
+                      //     //       borderRadius: BorderRadius.circular(12),
+                      //     //       boxShadow: [
+                      //     //         BoxShadow(
+                      //     //           color: Colors.black.withOpacity(.1),
+                      //     //           spreadRadius: 5,
+                      //     //           blurRadius: 10,
+                      //     //           offset: Offset(0, 8),
+                      //     //         ),
+                      //     //       ],
+                      //     //     ),
+                      //     //     child: Row(
+                      //     //       children: [
+                      //     //         20.width,
+                      //     //         Expanded(
+                      //     //           flex: 1,
+                      //     //           child: Align(
+                      //     //             alignment: AlignmentDirectional.centerEnd,
+                      //     //             child: Image.asset(
+                      //     //               'assets/ic_app_logo.png',
+                      //     //             ).paddingAll(0),
+                      //     //           ),
+                      //     //         ),
+                      //     //         10.width,
+                      //     //         Expanded(
+                      //     //           flex: 4,
+                      //     //           child: Align(
+                      //     //             alignment: AlignmentDirectional.centerStart,
+                      //     //             child: Text(
+                      //     //               language.wantToGetMoney,
+                      //     //               style: boldTextStyle(
+                      //     //                 color: white,
+                      //     //                 size: appStore.selectedLanguageCode == "en" ? 15 : 18,
+                      //     //               ),
+                      //     //               maxLines: 2,
+                      //     //               textAlign: TextAlign.center,
+                      //     //             ),
+                      //     //           ),
+                      //     //         )
+                      //     //       ],
+                      //     //     ).paddingSymmetric(horizontal: 10, vertical: 10),
+                      //     //   ),
+                      //     // ).paddingSymmetric(horizontal: 10).visible(_makeMoneyVisibilityCondition),
+                      //     // 35.height,
+                      //   ],
+                      // ),
+                      // Column(
+                      //   children: [
+                      //     SliderLocationComponent(
+                      //       sliderList: snap.slider.validate(),
+                      //       featuredList: snap.featuredServices.validate(),
+                      //       callback: () async {
+                      //         appStore.setLoading(true);
 
-                    // PendingBookingComponent(upcomingData: snap.upcomingData),
-                    // 16.height,
-                    // FeaturedServiceListComponent(serviceList: snap.featuredServices.validate()),
-                    // ServiceListComponent(serviceList: snap.service.validate()),
-                    16.height,
-                    // if (otherSettingStore.postJobRequestEnable.getBoolInt()) NewJobRequestComponent(),
-                    16.height,
-                    // if (appStore.isLoggedIn)
-                    //   ViewAllLabel(
-                    //     label: language.myPostJobList,
-                    //     onTap: () => MyPostRequestListScreen().launch(context),
-                    //   ).paddingSymmetric(horizontal: 20),
-                    // if (appStore.isLoggedIn)
-                    //   SnapHelperWidget<List<PostJobData>>(
-                    //     future: postFuture,
-                    //     initialData: cachedPostJobList,
-                    //     onSuccess: (data) {
-                    //       return AnimatedListView(
-                    //         itemCount: data.length > 4 ? 4 : data.length,
-                    //         physics: NeverScrollableScrollPhysics(),
-                    //         shrinkWrap: true,
-                    //         padding: EdgeInsets.only(top: 0, bottom: 70),
-                    //         listAnimationType: ListAnimationType.FadeIn,
-                    //         fadeInConfiguration: FadeInConfiguration(duration: 2.seconds),
-                    //         itemBuilder: (_, i) {
-                    //           PostJobData postJob = data[i];
+                      //         init();
+                      //         setState(() {});
+                      //       },
+                      //     ),
+                      //   ],
+                      // ),
+                      // 10.height,
 
-                    //           return MyPostRequestItemComponent(
-                    //             data: postJob,
-                    //             callback: (v) {
-                    //               appStore.setLoading(v);
+                      // PendingBookingComponent(upcomingData: snap.upcomingData),
+                      // 16.height,
+                      // FeaturedServiceListComponent(serviceList: snap.featuredServices.validate()),
+                      // ServiceListComponent(serviceList: snap.service.validate()),
+                      16.height,
+                      // if (otherSettingStore.postJobRequestEnable.getBoolInt()) NewJobRequestComponent(),
+                      16.height,
+                      // if (appStore.isLoggedIn)
+                      //   ViewAllLabel(
+                      //     label: language.myPostJobList,
+                      //     onTap: () => MyPostRequestListScreen().launch(context),
+                      //   ).paddingSymmetric(horizontal: 20),
+                      // if (appStore.isLoggedIn)
+                      //   SnapHelperWidget<List<PostJobData>>(
+                      //     future: postFuture,
+                      //     initialData: cachedPostJobList,
+                      //     onSuccess: (data) {
+                      //       return AnimatedListView(
+                      //         itemCount: data.length > 4 ? 4 : data.length,
+                      //         physics: NeverScrollableScrollPhysics(),
+                      //         shrinkWrap: true,
+                      //         padding: EdgeInsets.only(top: 0, bottom: 70),
+                      //         listAnimationType: ListAnimationType.FadeIn,
+                      //         fadeInConfiguration: FadeInConfiguration(duration: 2.seconds),
+                      //         itemBuilder: (_, i) {
+                      //           PostJobData postJob = data[i];
 
-                    //               if (v) {
-                    //                 page = 1;
-                    //                 init();
-                    //                 setState(() {});
-                    //               }
-                    //             },
-                    //           );
-                    //         },
-                    //         emptyWidget: NoDataWidget(
-                    //           title: language.noPostJobFound,
-                    //           subTitle: language.noPostJobFoundSubtitle,
-                    //           imageWidget: EmptyStateWidget(),
-                    //         ).paddingSymmetric(horizontal: 20),
-                    //         onNextPage: () {
-                    //           if (!isLastPage) {
-                    //             page++;
-                    //             appStore.setLoading(true);
+                      //           return MyPostRequestItemComponent(
+                      //             data: postJob,
+                      //             callback: (v) {
+                      //               appStore.setLoading(v);
 
-                    //             init();
-                    //             setState(() {});
-                    //           }
-                    //         },
-                    //         onSwipeRefresh: () async {
-                    //           page = 1;
+                      //               if (v) {
+                      //                 page = 1;
+                      //                 init();
+                      //                 setState(() {});
+                      //               }
+                      //             },
+                      //           );
+                      //         },
+                      //         emptyWidget: NoDataWidget(
+                      //           title: language.noPostJobFound,
+                      //           subTitle: language.noPostJobFoundSubtitle,
+                      //           imageWidget: EmptyStateWidget(),
+                      //         ).paddingSymmetric(horizontal: 20),
+                      //         onNextPage: () {
+                      //           if (!isLastPage) {
+                      //             page++;
+                      //             appStore.setLoading(true);
 
-                    //           init();
-                    //           setState(() {});
+                      //             init();
+                      //             setState(() {});
+                      //           }
+                      //         },
+                      //         onSwipeRefresh: () async {
+                      //           page = 1;
 
-                    //           return await 2.seconds.delay;
-                    //         },
-                    //       );
-                    //     },
-                    //     loadingWidget: LoaderWidget(),
-                    //     errorBuilder: (error) {
-                    //       return NoDataWidget(
-                    //         title: error,
-                    //         imageWidget: ErrorStateWidget(),
-                    //         retryText: language.reload,
-                    //         onRetry: () {
-                    //           page = 1;
-                    //           appStore.setLoading(true);
+                      //           init();
+                      //           setState(() {});
 
-                    // init();
-                    //           setState(() {});
-                    //         },
-                    //       );
-                    //     },
-                    //   ),
-                    20.height,
-                  ],
-                );
-              });
-            },
-          ),
-          Observer(
-              builder: (context) => LoaderWidget().visible(appStore.isLoading)),
-        ],
+                      //           return await 2.seconds.delay;
+                      //         },
+                      //       );
+                      //     },
+                      //     loadingWidget: LoaderWidget(),
+                      //     errorBuilder: (error) {
+                      //       return NoDataWidget(
+                      //         title: error,
+                      //         imageWidget: ErrorStateWidget(),
+                      //         retryText: language.reload,
+                      //         onRetry: () {
+                      //           page = 1;
+                      //           appStore.setLoading(true);
+
+                      // init();
+                      //           setState(() {});
+                      //         },
+                      //       );
+                      //     },
+                      //   ),
+                      20.height,
+                    ],
+                  );
+                });
+              },
+            ),
+            Observer(
+                builder: (context) =>
+                    LoaderWidget().visible(appStore.isLoading)),
+          ],
+        ),
       ),
     );
   }
