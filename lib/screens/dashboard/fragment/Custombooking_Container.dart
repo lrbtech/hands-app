@@ -40,7 +40,7 @@ Widget doublecontainer({
   double width = MediaQuery.sizeOf(context).width;
   return Container(
     height: 117,
-    width: width - width * 0.55,
+    width: width - width * 0.58,
     decoration: BoxDecoration(
       color: primaryColor,
       borderRadius: BorderRadius.circular(16.0),

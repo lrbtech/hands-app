@@ -86,7 +86,7 @@ class _OtpDialogComponentState extends State<OtpDialogComponent> {
     return Scaffold(
       appBar: appBarWidget(
         language.confirmOTP,
-        backWidget: BackWidget(iconColor: context.iconColor),
+        backWidget: BackWidget(iconColor: primaryColor),
         textSize: APP_BAR_TEXT_SIZE,
         elevation: 0,
         color: context.scaffoldBackgroundColor,
@@ -136,7 +136,7 @@ class _OtpDialogComponentState extends State<OtpDialogComponent> {
                 Container(
                   width: double.infinity,
                   padding: EdgeInsets.symmetric(horizontal: 30, vertical: 30),
-                  decoration: boxDecorationDefault(color: context.cardColor),
+                  decoration: boxDecorationDefault(color: white),
                   child: 1 == 1
                       ? Center(
                           child: Directionality(

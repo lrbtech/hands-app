@@ -29,6 +29,9 @@ import 'package:hands_user_app/screens/dashboard/dashboard_screen.dart';
 import 'package:hands_user_app/screens/jobRequest/model/timeslot.dart';
 import 'package:hands_user_app/screens/jobRequest/my_post_request_list_screen.dart';
 import 'package:hands_user_app/screens/jobRequest/reltime_bidders_list.dart';
+import 'package:hands_user_app/screens/provider/Utils/Gender_Radio.dart';
+import 'package:hands_user_app/screens/provider/Utils/memberSelect.dart';
+import 'package:hands_user_app/screens/provider/Utils/offerSelect.dart';
 import 'package:hands_user_app/services/firebase/firebase_database_service.dart';
 import 'package:hands_user_app/utils/colors.dart';
 import 'package:hands_user_app/utils/common.dart';
@@ -53,10 +56,12 @@ class CreatePostRequestScreen extends StatefulWidget {
   final bool isUrgent;
   final JobDateType jobDateType;
 
-  CreatePostRequestScreen({this.categoryId, this.isUrgent = false, required this.jobDateType});
+  CreatePostRequestScreen(
+      {this.categoryId, this.isUrgent = false, required this.jobDateType});
 
   @override
-  _CreatePostRequestScreenState createState() => _CreatePostRequestScreenState();
+  _CreatePostRequestScreenState createState() =>
+      _CreatePostRequestScreenState();
 }
 
 class _CreatePostRequestScreenState extends State<CreatePostRequestScreen> {
@@ -78,12 +83,13 @@ class _CreatePostRequestScreenState extends State<CreatePostRequestScreen> {
 
   FocusNode descriptionFocus = FocusNode();
   FocusNode priceFocus = FocusNode();
-
+  String? _selectedMember = "Yes";
+  String? _selectedOffer = "Yes";
   List<ServiceData> myServiceList = [];
   List<ServiceData> selectedServiceList = [];
   List<File> imageFiles = [];
   List<Attachments> attachmentsArray = [];
-
+  int? members = 1;
   int _selectedTimeFrameId = -1;
   DateTime? _selectedDate;
 
@@ -93,9 +99,27 @@ class _CreatePostRequestScreenState extends State<CreatePostRequestScreen> {
   List<Attachments> tempAttachments = [];
 
   List<Timeslot> slots = [
-    Timeslot(slot: Timeslots.Morning, name: 'Morning', nameAr: 'الصباح', time: '6am - 12am', timeString: '6AM - 12PM', timeStringAr: '٦ صباحاً - ١٢ ظهراً'),
-    Timeslot(slot: Timeslots.Noon, name: 'Noon', nameAr: 'النهار', time: '12pm - 6pm', timeString: '12PM - 6PM', timeStringAr: '١٢ ظهراً - ٦ مساءً'),
-    Timeslot(slot: Timeslots.Night, name: 'Night', nameAr: 'الليل', time: '6pm - 12pm', timeString: '6PM - 12AM', timeStringAr: '٦ مساءً - ١٢ صباحاً'),
+    Timeslot(
+        slot: Timeslots.Morning,
+        name: 'Morning',
+        nameAr: 'الصباح',
+        time: '6am - 12am',
+        timeString: '6AM - 12PM',
+        timeStringAr: '٦ صباحاً - ١٢ ظهراً'),
+    Timeslot(
+        slot: Timeslots.Noon,
+        name: 'Noon',
+        nameAr: 'النهار',
+        time: '12pm - 6pm',
+        timeString: '12PM - 6PM',
+        timeStringAr: '١٢ ظهراً - ٦ مساءً'),
+    Timeslot(
+        slot: Timeslots.Night,
+        name: 'Night',
+        nameAr: 'الليل',
+        time: '6pm - 12pm',
+        timeString: '6PM - 12AM',
+        timeStringAr: '٦ مساءً - ١٢ صباحاً'),
   ];
 
   void selectTimeFrame({required int timeFrameId}) {
@@ -132,8 +156,10 @@ class _CreatePostRequestScreenState extends State<CreatePostRequestScreen> {
   void initState() {
     var keyboardVisibilityController = KeyboardVisibilityController();
 
-    print('Keyboard visibility direct query: ${keyboardVisibilityController.isVisible}');
-    keyboardSubscription = keyboardVisibilityController.onChange.listen((bool visible) {
+    print(
+        'Keyboard visibility direct query: ${keyboardVisibilityController.isVisible}');
+    keyboardSubscription =
+        keyboardVisibilityController.onChange.listen((bool visible) {
       print('Keyboard visibility update. Is visible: $visible');
       keyboardVisible = visible;
       afterBuildCreated(() => setState(() {}));
@@ -204,7 +230,8 @@ class _CreatePostRequestScreenState extends State<CreatePostRequestScreen> {
     List<String> x = [];
 
     categoryList?.forEach((element) {
-      String? name = appStore.selectedLanguageCode == 'en' ? element.name : element.nameAr;
+      String? name =
+          appStore.selectedLanguageCode == 'en' ? element.name : element.nameAr;
       x.add(name ?? '');
     });
 
@@ -232,7 +259,9 @@ class _CreatePostRequestScreenState extends State<CreatePostRequestScreen> {
     DateTime? selectedDate = await showDatePicker(
       context: context,
       initialDate: _selectedDate,
-      firstDate: widget.jobDateType == JobDateType.Scheduled ? DateTime.now().add(Duration(days: 1)) : DateTime.now(),
+      firstDate: widget.jobDateType == JobDateType.Scheduled
+          ? DateTime.now().add(Duration(days: 1))
+          : DateTime.now(),
       lastDate: DateTime.now().add(
         Duration(days: 7),
       ),
@@ -274,18 +303,29 @@ class _CreatePostRequestScreenState extends State<CreatePostRequestScreen> {
       });
     }
 
-    MultipartRequest multiPartRequest = await getMultiPartRequest('save-post-job');
+    MultipartRequest multiPartRequest =
+        await getMultiPartRequest('save-post-job');
 
     multiPartRequest.fields[PostJob.postTitle] = postTitleCont.text.validate();
-    multiPartRequest.fields[PostJob.description] = descriptionCont.text.validate();
-    multiPartRequest.fields[PostJob.addressId] = appStore.tempAddress!.id.toString();
+    multiPartRequest.fields[PostJob.description] =
+        descriptionCont.text.validate();
+    multiPartRequest.fields[PostJob.addressId] =
+        appStore.tempAddress!.id.toString();
     multiPartRequest.fields[PostJob.price] = priceCont.text.validate();
     // multiPartRequest.fields[PostJob.isPublic] = '1';
     String? id = '';
     if (appStore.selectedLanguageCode == 'en') {
-      id = categoryList?.where((element) => element.name == _controller.text).first.id.toString();
+      id = categoryList
+          ?.where((element) => element.name == _controller.text)
+          .first
+          .id
+          .toString();
     } else {
-      id = categoryList?.where((element) => element.nameAr == _controller.text).first.id.toString();
+      id = categoryList
+          ?.where((element) => element.nameAr == _controller.text)
+          .first
+          .id
+          .toString();
     }
     print('Selected category id = $id');
     multiPartRequest.fields[PostJob.category] = id.validate();
@@ -293,25 +333,33 @@ class _CreatePostRequestScreenState extends State<CreatePostRequestScreen> {
     // multiPartRequest.fields[PostJob.latitude]= appStore.latitude.toString();
     // multiPartRequest.fields[PostJob.longitude]= appStore.longitude;
     if (widget.categoryId != null && widget.categoryId is int) {
-      multiPartRequest.fields[PostJob.categoryId] = widget.categoryId.toString();
+      multiPartRequest.fields[PostJob.categoryId] =
+          widget.categoryId.toString();
     }
-    multiPartRequest.fields[PostJob.date] = formatBookingDate(_selectedDate.toString(), format: DATE_FORMAT_1);
+    multiPartRequest.fields[PostJob.date] =
+        formatBookingDate(_selectedDate.toString(), format: DATE_FORMAT_1);
     if (!widget.isUrgent) {
       // multiPartRequest.fields[PostJob.timeslotId] = (_selectedTimeFrameId + 1).toString();
-      multiPartRequest.fields[PostJob.timeslotId] = (selectedTime!.hour + 1).toString();
+      multiPartRequest.fields[PostJob.timeslotId] =
+          (selectedTime!.hour + 1).toString();
     }
     multiPartRequest.fields[PostJob.isUrgent] = widget.isUrgent ? '1' : '0';
 
     if (imageFiles.isNotEmpty) {
-      List<File> tempImages = imageFiles.where((element) => !element.path.contains("https")).toList();
+      List<File> tempImages = imageFiles
+          .where((element) => !element.path.contains("https"))
+          .toList();
 
       multiPartRequest.files.clear();
       await Future.forEach<File>(tempImages, (element) async {
         int i = tempImages.indexOf(element);
-        multiPartRequest.files.add(await MultipartFile.fromPath('${CreateService.serviceAttachment + i.toString()}', element.path));
+        multiPartRequest.files.add(await MultipartFile.fromPath(
+            '${CreateService.serviceAttachment + i.toString()}', element.path));
       });
 
-      if (tempImages.isNotEmpty) multiPartRequest.fields[CreateService.attachmentCount] = tempImages.length.toString();
+      if (tempImages.isNotEmpty)
+        multiPartRequest.fields[CreateService.attachmentCount] =
+            tempImages.length.toString();
     }
 
     multiPartRequest.headers.addAll(buildHeaderTokens());
@@ -323,8 +371,11 @@ class _CreatePostRequestScreenState extends State<CreatePostRequestScreen> {
           print('Data from sendMultiPartRequest is ${data}');
           PostJobData jobData = PostJobData.fromJson(json.decode(data)['data']);
           print('MY ADDRESS = ${json.decode(data)['data']}');
-          await firebaseDbService.firebaseJobRequest(jobRequest: jobData).then((value) {
-            showInDialog(context, contentPadding: EdgeInsets.zero, builder: (context) {
+          await firebaseDbService
+              .firebaseJobRequest(jobRequest: jobData)
+              .then((value) {
+            showInDialog(context, contentPadding: EdgeInsets.zero,
+                builder: (context) {
               return PopScope(
                 canPop: false,
                 onPopInvoked: (_) {},
@@ -337,17 +388,23 @@ class _CreatePostRequestScreenState extends State<CreatePostRequestScreen> {
                       child: Container(
                         width: context.width() * .9,
                         height: 300,
-                        decoration: boxDecorationWithRoundedCorners(backgroundColor: context.scaffoldBackgroundColor, borderRadius: radius(20)),
+                        decoration: boxDecorationWithRoundedCorners(
+                            backgroundColor: context.scaffoldBackgroundColor,
+                            borderRadius: radius(20)),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             10.height,
-                            Lottie.asset('assets/lottie/empty_lottie.json', height: 100, repeat: true),
+                            Lottie.asset('assets/lottie/empty_lottie.json',
+                                height: 100, repeat: true),
                             10.height,
                             Directionality(
                               textDirection: TextDirection.ltr,
                               child: Countdown(
-                                seconds: [null, 0, 0.0, ''].contains(appStore.radarTime) ? DEFAULT_RADAR_TIMER_IN_SECONDS : appStore.radarTime!,
+                                seconds: [null, 0, 0.0, '']
+                                        .contains(appStore.radarTime)
+                                    ? DEFAULT_RADAR_TIMER_IN_SECONDS
+                                    : appStore.radarTime!,
                                 interval: Duration(milliseconds: 100),
                                 onFinished: () {
                                   dataBaseEvent?.cancel();
@@ -356,7 +413,8 @@ class _CreatePostRequestScreenState extends State<CreatePostRequestScreen> {
                                     postJobId: jobData.id!.toInt(),
                                   ).launch(context);
                                 },
-                                build: (BuildContext context, double time) => Row(
+                                build: (BuildContext context, double time) =>
+                                    Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     // Text(time.toString()),
@@ -364,14 +422,28 @@ class _CreatePostRequestScreenState extends State<CreatePostRequestScreen> {
                                       width: 50,
                                       height: 50,
                                       decoration: BoxDecoration(
-                                        color: appStore.isDarkMode ? white : primaryColor,
-                                        border: Border.all(color: appStore.isDarkMode ? white : primaryColor, width: 1),
+                                        color: appStore.isDarkMode
+                                            ? white
+                                            : primaryColor,
+                                        border: Border.all(
+                                            color: appStore.isDarkMode
+                                                ? white
+                                                : primaryColor,
+                                            width: 1),
                                         borderRadius: BorderRadius.circular(12),
                                       ),
                                       child: Center(
                                           child: Text(
-                                        time.toString().split('.').first.toString(),
-                                        style: boldTextStyle(size: 20, color: !appStore.isDarkMode ? white : primaryColor),
+                                        time
+                                            .toString()
+                                            .split('.')
+                                            .first
+                                            .toString(),
+                                        style: boldTextStyle(
+                                            size: 20,
+                                            color: !appStore.isDarkMode
+                                                ? white
+                                                : primaryColor),
                                       )),
                                     ),
                                     10.width,
@@ -379,8 +451,14 @@ class _CreatePostRequestScreenState extends State<CreatePostRequestScreen> {
                                       width: 50,
                                       height: 50,
                                       decoration: BoxDecoration(
-                                        color: appStore.isDarkMode ? white : primaryColor,
-                                        border: Border.all(color: appStore.isDarkMode ? white : primaryColor, width: 1),
+                                        color: appStore.isDarkMode
+                                            ? white
+                                            : primaryColor,
+                                        border: Border.all(
+                                            color: appStore.isDarkMode
+                                                ? white
+                                                : primaryColor,
+                                            width: 1),
                                         borderRadius: BorderRadius.circular(12),
                                       ),
                                       child: Center(
@@ -388,7 +466,9 @@ class _CreatePostRequestScreenState extends State<CreatePostRequestScreen> {
                                         '0${time.toString().split('.').last.toString()}',
                                         style: boldTextStyle(
                                           size: 20,
-                                          color: !appStore.isDarkMode ? white : primaryColor,
+                                          color: !appStore.isDarkMode
+                                              ? white
+                                              : primaryColor,
                                         ),
                                       )),
                                     ),
@@ -398,9 +478,12 @@ class _CreatePostRequestScreenState extends State<CreatePostRequestScreen> {
                             ),
                             20.height,
                             Text(
-                              appStore.selectedLanguageCode == 'en' ? 'We are finding the best Hands for your request. Please be patient wth us.' : 'نحن نبحث عن أفضل مقدمين خدمات لتلبية طلبك. يرجى التحلي بالصبر معنا.',
+                              appStore.selectedLanguageCode == 'en'
+                                  ? 'We are finding the best Hands for your request. Please be patient wth us.'
+                                  : 'نحن نبحث عن أفضل مقدمين خدمات لتلبية طلبك. يرجى التحلي بالصبر معنا.',
                               textAlign: TextAlign.center,
-                              style: primaryTextStyle(color: textSecondaryColor),
+                              style:
+                                  primaryTextStyle(color: textSecondaryColor),
                             ).paddingSymmetric(horizontal: 10),
                           ],
                         ),
@@ -410,7 +493,9 @@ class _CreatePostRequestScreenState extends State<CreatePostRequestScreen> {
                       top: 10,
                       left: 10,
                       child: IconButton(
-                        style: IconButton.styleFrom(backgroundColor: Color(0xFFde3a3b), fixedSize: Size(24, 24)),
+                        style: IconButton.styleFrom(
+                            backgroundColor: Color(0xFFde3a3b),
+                            fixedSize: Size(24, 24)),
                         onPressed: () {
                           showCustomConfirmDialog(
                             context,
@@ -444,7 +529,8 @@ class _CreatePostRequestScreenState extends State<CreatePostRequestScreen> {
 
           print('kareem = ${jobData.id}');
 
-          final reference = database.ref().child('$JOB_REQUESTS/${jobData.id}/bidders');
+          final reference =
+              database.ref().child('$JOB_REQUESTS/${jobData.id}/bidders');
           dataBaseEvent = reference.onChildAdded.listen((event) {
             if (!appStore.isLoggedIn) {
               dataBaseEvent!.cancel();
@@ -540,7 +626,8 @@ class _CreatePostRequestScreenState extends State<CreatePostRequestScreen> {
                             margin: EdgeInsets.symmetric(horizontal: 20),
                             child: Form(
                               key: formKey,
-                              autovalidateMode: AutovalidateMode.onUserInteraction,
+                              autovalidateMode:
+                                  AutovalidateMode.onUserInteraction,
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -568,29 +655,39 @@ class _CreatePostRequestScreenState extends State<CreatePostRequestScreen> {
                                       searchHintText: language.lblSearchFor,
                                       items: future ?? [],
                                       excludeSelected: false,
-                                      noResultFoundText: language.noCategoryFound,
-                                      noResultFoundBuilder: (context, text) => Padding(
+                                      noResultFoundText:
+                                          language.noCategoryFound,
+                                      noResultFoundBuilder: (context, text) =>
+                                          Padding(
                                         padding: const EdgeInsets.all(20),
                                         child: Center(
                                           child: Text(
                                             text,
                                             style: primaryTextStyle(
-                                              color: appStore.isDarkMode ? white : context.primaryColor,
+                                              color: appStore.isDarkMode
+                                                  ? white
+                                                  : context.primaryColor,
                                             ),
                                           ),
                                         ),
                                       ),
                                       decoration: CustomDropdownDecoration(
-                                        closedFillColor: context.scaffoldBackgroundColor,
-                                        expandedFillColor: context.scaffoldBackgroundColor,
+                                        closedFillColor:
+                                            context.scaffoldBackgroundColor,
+                                        expandedFillColor:
+                                            context.scaffoldBackgroundColor,
                                         listItemStyle: primaryTextStyle(
-                                          color: appStore.isDarkMode ? white : context.primaryColor,
+                                          color: appStore.isDarkMode
+                                              ? white
+                                              : context.primaryColor,
                                         ),
                                         listItemDecoration: ListItemDecoration(
                                           selectedColor: greenColor,
                                         ),
                                         headerStyle: primaryTextStyle(
-                                          color: appStore.isDarkMode ? white : context.primaryColor,
+                                          color: appStore.isDarkMode
+                                              ? white
+                                              : context.primaryColor,
                                         ),
                                       ),
                                       onChanged: (value) {
@@ -641,14 +738,17 @@ class _CreatePostRequestScreenState extends State<CreatePostRequestScreen> {
                                   AppTextField(
                                     controller: postTitleCont,
                                     textFieldType: TextFieldType.NAME,
-                                    errorThisFieldRequired: language.requiredText,
+                                    errorThisFieldRequired:
+                                        language.requiredText,
                                     nextFocus: descriptionFocus,
                                     decoration: inputDecoration(
                                       context,
                                     ).copyWith(
                                       hintText: language.postJobTitleHint,
-                                      hintStyle: primaryTextStyle(color: dimGrey.withOpacity(0.8)),
-                                      fillColor: context.scaffoldBackgroundColor,
+                                      hintStyle: primaryTextStyle(
+                                          color: dimGrey.withOpacity(0.8)),
+                                      fillColor:
+                                          context.scaffoldBackgroundColor,
                                     ),
                                   ),
                                   16.height,
@@ -669,7 +769,8 @@ class _CreatePostRequestScreenState extends State<CreatePostRequestScreen> {
                                   AppTextField(
                                     controller: descriptionCont,
                                     textFieldType: TextFieldType.MULTILINE,
-                                    errorThisFieldRequired: language.requiredText,
+                                    errorThisFieldRequired:
+                                        language.requiredText,
                                     maxLines: 5,
                                     focus: descriptionFocus,
                                     nextFocus: priceFocus,
@@ -684,16 +785,18 @@ class _CreatePostRequestScreenState extends State<CreatePostRequestScreen> {
                                     decoration: inputDecoration(
                                       context,
                                     ).copyWith(
-                                      fillColor: context.scaffoldBackgroundColor,
+                                      fillColor:
+                                          context.scaffoldBackgroundColor,
                                       hintText: language.postJobDescriptionHint,
-                                      hintStyle: primaryTextStyle(color: dimGrey.withOpacity(0.8)),
+                                      hintStyle: primaryTextStyle(
+                                          color: dimGrey.withOpacity(0.8)),
                                     ),
                                   ),
                                   16.height,
                                   Row(
                                     children: [
                                       Text(
-                                        language.estimatedPrice,
+                                        "Do you want add members?",
                                         style: boldTextStyle(),
                                       ),
                                       4.width,
@@ -703,43 +806,97 @@ class _CreatePostRequestScreenState extends State<CreatePostRequestScreen> {
                                       // )
                                     ],
                                   ),
-                                  5.height,
-                                  Directionality(
-                                    textDirection: appStore.selectedLanguageCode == "en" ? TextDirection.ltr : TextDirection.rtl,
-                                    child: AppTextField(
-                                      textFieldType: TextFieldType.NUMBER,
-                                      controller: priceCont,
-                                      focus: priceFocus,
-                                      errorThisFieldRequired: language.requiredText,
-                                      textStyle: boldTextStyle(),
-                                      isValidationRequired: false,
-                                      decoration: inputDecoration(context,
-                                              prefixIcon: Row(
-                                                crossAxisAlignment: CrossAxisAlignment.center,
-                                                mainAxisSize: MainAxisSize.min,
-                                                children: [
-                                                  // 10.width,
-                                                  // Icon(
-                                                  //   Iconsax.dollar_circle,
-                                                  //   color: primaryColor,
-                                                  // ),
-                                                  10.width,
-                                                  Text(
-                                                    'AED',
-                                                    style: boldTextStyle(),
-                                                  ),
-                                                ],
-                                              ).paddingSymmetric(horizontal: 5))
-                                          .copyWith(hintText: language.priceHint, hintStyle: secondaryTextStyle(color: dimGrey.withOpacity(0.8)), fillColor: context.scaffoldBackgroundColor),
-                                      keyboardType: TextInputType.numberWithOptions(decimal: false, signed: false),
-                                      // validator: (s) {
-                                      //   if (s!.isEmpty) return errorThisFieldRequired;
-
-                                      //   if (s.toDouble() <= 0) return language.priceAmountValidationMessage;
-                                      //   return null;
-                                      // },
+                                  8.height,
+                                  Container(
+                                    width: 200,
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(15),
+                                    ),
+                                    child: memberSelect(
+                                      context: context,
+                                      activeColor: primaryColor,
+                                      selectedGender: _selectedMember,
+                                      textColor: primaryColor,
+                                      onChanged: (String? value) {
+                                        setState(() {
+                                          _selectedMember = value;
+                                        });
+                                      },
                                     ),
                                   ),
+
+                                  16.height,
+                                  _selectedMember == "Yes"
+                                      ? Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Row(
+                                              children: [
+                                                Text(
+                                                  "How many members you want?",
+                                                  style: boldTextStyle(),
+                                                ),
+                                                4.width,
+                                                // Text(
+                                                //   '*',
+                                                //   style: boldTextStyle(color: redColor),
+                                                // )
+                                              ],
+                                            ),
+                                            16.height,
+                                            Container(
+                                              // width: 200,
+                                              height: 40,
+                                              width: 120,
+                                              decoration: BoxDecoration(
+                                                color: Colors.white,
+                                                borderRadius:
+                                                    BorderRadius.circular(15),
+                                              ),
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceAround,
+                                                children: [
+                                                  GestureDetector(
+                                                    onTap: () {
+                                                      if (members! > 1) {
+                                                        setState(() {
+                                                          members =
+                                                              members! - 1;
+                                                        });
+                                                      }
+                                                    },
+                                                    child: Image.asset(
+                                                      "assets/icons/minus.png",
+                                                      width: 25,
+                                                    ),
+                                                  ),
+                                                  Text(
+                                                    "${members}",
+                                                    style:
+                                                        TextStyle(fontSize: 22),
+                                                  ),
+                                                  GestureDetector(
+                                                    onTap: () {
+                                                      setState(() {
+                                                        members = members! + 1;
+                                                      });
+                                                    },
+                                                    child: Image.asset(
+                                                      "assets/icons/add.png",
+                                                      width: 25,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ],
+                                        )
+                                      : SizedBox(),
+
                                   16.height,
                                 ],
                               ).paddingAll(16),
@@ -754,18 +911,26 @@ class _CreatePostRequestScreenState extends State<CreatePostRequestScreen> {
                                   Expanded(
                                     flex: 2,
                                     child: Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 30),
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 20.0, vertical: 30),
                                       child: AppButton(
                                         child: Text(
-                                          appStore.currentBookingStep == 0 ? language.btnNext : (appStore.selectedLanguageCode == 'en' ? 'Find Hands' : 'إبحث الآن'),
+                                          appStore.currentBookingStep == 0
+                                              ? language.btnNext
+                                              : (appStore.selectedLanguageCode ==
+                                                      'en'
+                                                  ? 'Find Hands'
+                                                  : 'إبحث الآن'),
                                           style: boldTextStyle(color: black),
                                         ),
                                         color: white,
                                         elevation: 5,
                                         onTap: () {
-                                          if (appStore.currentBookingStep == 0) {
+                                          if (appStore.currentBookingStep ==
+                                              0) {
                                             hideKeyboard(context);
-                                            if (formKey.currentState!.validate()) {
+                                            if (formKey.currentState!
+                                                .validate()) {
                                               formKey.currentState!.save();
                                               appStore.currentBookingStep = 1;
                                               setState(() {});
@@ -773,7 +938,8 @@ class _CreatePostRequestScreenState extends State<CreatePostRequestScreen> {
                                           } else {
                                             hideKeyboard(context);
                                             if (appStore.tempAddress == null) {
-                                              toast(language.pleaseEnterYourAddress);
+                                              toast(language
+                                                  .pleaseEnterYourAddress);
                                               setState(() {});
                                               return;
                                             }
@@ -795,10 +961,122 @@ class _CreatePostRequestScreenState extends State<CreatePostRequestScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Container(
+                            width: MediaQuery.sizeOf(context).width,
                             decoration: boxDecorationWithRoundedCorners(
                               backgroundColor: context.cardColor,
                             ),
-                            padding: EdgeInsets.symmetric(vertical: 20, horizontal: 10),
+                            padding: EdgeInsets.symmetric(
+                                vertical: 20, horizontal: 10),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "Suggest your offer?",
+                                  style: boldTextStyle(),
+                                ),
+                                10.height,
+                                Container(
+                                  width: 200,
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(15),
+                                  ),
+                                  child: offerSelect(
+                                    context: context,
+                                    activeColor: primaryColor,
+                                    selectedGender: _selectedOffer,
+                                    textColor: primaryColor,
+                                    onChanged: (String? value) {
+                                      setState(() {
+                                        _selectedOffer = value;
+                                      });
+                                    },
+                                  ),
+                                ),
+                                _selectedOffer == "Yes"
+                                    ? Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          15.height,
+                                          Text(
+                                            "Add your suggested offer!",
+                                            style: boldTextStyle(),
+                                          ),
+                                          10.height,
+                                          Directionality(
+                                            textDirection:
+                                                appStore.selectedLanguageCode ==
+                                                        "en"
+                                                    ? TextDirection.ltr
+                                                    : TextDirection.rtl,
+                                            child: AppTextField(
+                                              textFieldType:
+                                                  TextFieldType.NUMBER,
+                                              controller: priceCont,
+                                              focus: priceFocus,
+                                              errorThisFieldRequired:
+                                                  language.requiredText,
+                                              textStyle: boldTextStyle(),
+                                              isValidationRequired: false,
+                                              decoration: inputDecoration(
+                                                      context,
+                                                      prefixIcon: Row(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .center,
+                                                        mainAxisSize:
+                                                            MainAxisSize.min,
+                                                        children: [
+                                                          // 10.width,
+                                                          // Icon(
+                                                          //   Iconsax.dollar_circle,
+                                                          //   color: primaryColor,
+                                                          // ),
+                                                          10.width,
+                                                          Text(
+                                                            'AED',
+                                                            style:
+                                                                boldTextStyle(),
+                                                          ),
+                                                        ],
+                                                      ).paddingSymmetric(
+                                                          horizontal: 5))
+                                                  .copyWith(
+                                                      hintText: language
+                                                          .priceHint,
+                                                      hintStyle:
+                                                          secondaryTextStyle(
+                                                              color: dimGrey
+                                                                  .withOpacity(
+                                                                      0.8)),
+                                                      fillColor: context
+                                                          .scaffoldBackgroundColor),
+                                              keyboardType: TextInputType
+                                                  .numberWithOptions(
+                                                      decimal: false,
+                                                      signed: false),
+                                              // validator: (s) {
+                                              //   if (s!.isEmpty) return errorThisFieldRequired;
+
+                                              //   if (s.toDouble() <= 0) return language.priceAmountValidationMessage;
+                                              //   return null;
+                                              // },
+                                            ),
+                                          ),
+                                        ],
+                                      )
+                                    : SizedBox(),
+                              ],
+                            ),
+                          ),
+                          20.height,
+                          Container(
+                            decoration: boxDecorationWithRoundedCorners(
+                              backgroundColor: context.cardColor,
+                            ),
+                            padding: EdgeInsets.symmetric(
+                                vertical: 20, horizontal: 10),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -830,21 +1108,31 @@ class _CreatePostRequestScreenState extends State<CreatePostRequestScreen> {
                                       ),
                                       10.width,
                                       Text(
-                                        _selectedDate != null ? formatBookingDate(_selectedDate.toString(), format: DATE_FORMAT_1).substring(0, 12) : language.lblSelectDate,
-                                        style: boldTextStyle().copyWith(color: black),
+                                        _selectedDate != null
+                                            ? formatBookingDate(
+                                                    _selectedDate.toString(),
+                                                    format: DATE_FORMAT_1)
+                                                .substring(0, 12)
+                                            : language.lblSelectDate,
+                                        style: boldTextStyle()
+                                            .copyWith(color: black),
                                       ),
                                       Spacer(),
-                                      if (widget.jobDateType == JobDateType.Today)
+                                      if (widget.jobDateType ==
+                                          JobDateType.Today)
                                         Text(
                                           language.today,
                                           style: boldTextStyle(color: redColor),
                                         ),
-                                      if (widget.jobDateType == JobDateType.Tomorrow)
+                                      if (widget.jobDateType ==
+                                          JobDateType.Tomorrow)
                                         Text(
                                           language.tomorrow,
                                           style: boldTextStyle(color: redColor),
                                         ),
-                                      if (widget.jobDateType == JobDateType.Scheduled && _selectedDate != null)
+                                      if (widget.jobDateType ==
+                                              JobDateType.Scheduled &&
+                                          _selectedDate != null)
                                         IconButton(
                                           icon: Icon(Iconsax.edit),
                                           onPressed: () => dateTap(),
@@ -874,14 +1162,18 @@ class _CreatePostRequestScreenState extends State<CreatePostRequestScreen> {
                                           horizontal: 10,
                                           vertical: 10,
                                         ),
-                                        decoration: boxDecorationWithRoundedCorners(
+                                        decoration:
+                                            boxDecorationWithRoundedCorners(
                                           border: Border.all(
-                                            color: _selectedTimeFrameId == 0 ? primaryColor : transparentColor,
+                                            color: _selectedTimeFrameId == 0
+                                                ? primaryColor
+                                                : transparentColor,
                                             width: 1,
                                           ),
                                         ),
                                         child: Row(
-                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
                                           children: [
                                             Icon(
                                               Iconsax.timer_1,
@@ -890,8 +1182,12 @@ class _CreatePostRequestScreenState extends State<CreatePostRequestScreen> {
                                             10.width,
                                             Center(
                                               child: Text(
-                                                appStore.selectedLanguageCode == 'en' ? "Now" : "الان",
-                                                style: boldTextStyle(color: redColor),
+                                                appStore.selectedLanguageCode ==
+                                                        'en'
+                                                    ? "Now"
+                                                    : "الان",
+                                                style: boldTextStyle(
+                                                    color: redColor),
                                               ),
                                             ),
                                           ],
@@ -902,19 +1198,35 @@ class _CreatePostRequestScreenState extends State<CreatePostRequestScreen> {
                                           Navigator.of(context).push(
                                             showPicker(
                                               context: context,
-                                              value: widget.jobDateType == JobDateType.Today ? (selectedTime ?? Time(hour: DateTime.now().hour + 1, minute: 0)) : (selectedTime ?? Time(hour: 0, minute: 0)),
+                                              value: widget.jobDateType ==
+                                                      JobDateType.Today
+                                                  ? (selectedTime ??
+                                                      Time(
+                                                          hour: DateTime.now()
+                                                                  .hour +
+                                                              1,
+                                                          minute: 0))
+                                                  : (selectedTime ??
+                                                      Time(hour: 0, minute: 0)),
                                               disableMinute: true,
-                                              minHour: widget.jobDateType == JobDateType.Today ? (DateTime.now().hour + 1).toDouble() : 0,
+                                              minHour: widget.jobDateType ==
+                                                      JobDateType.Today
+                                                  ? (DateTime.now().hour + 1)
+                                                      .toDouble()
+                                                  : 0,
                                               maxHour: 23,
-                                              sunrise: TimeOfDay(hour: 6, minute: 0),
-                                              sunset: TimeOfDay(hour: 18, minute: 0),
+                                              sunrise:
+                                                  TimeOfDay(hour: 6, minute: 0),
+                                              sunset: TimeOfDay(
+                                                  hour: 18, minute: 0),
                                               duskSpanInMinutes: 120,
                                               amLabel: language.am,
                                               pmLabel: language.pm,
                                               okText: language.confirm,
                                               cancelText: language.lblCancel,
                                               blurredBackground: true,
-                                              hmsStyle: primaryTextStyle(color: redColor),
+                                              hmsStyle: primaryTextStyle(
+                                                  color: redColor),
                                               accentColor: context.primaryColor,
                                               okStyle: boldTextStyle(
                                                 color: context.primaryColor,
@@ -927,13 +1239,15 @@ class _CreatePostRequestScreenState extends State<CreatePostRequestScreen> {
                                                 setState(() {
                                                   selectedTime = time;
                                                 });
-                                                print('Time is ${timeToString(selectedTime)} and hour is ${selectedTime!.hour + 1}');
+                                                print(
+                                                    'Time is ${timeToString(selectedTime)} and hour is ${selectedTime!.hour + 1}');
                                               },
                                             ),
                                           );
                                         },
                                         child: Container(
-                                          decoration: boxDecorationWithRoundedCorners(),
+                                          decoration:
+                                              boxDecorationWithRoundedCorners(),
                                           padding: EdgeInsets.symmetric(
                                             horizontal: 10,
                                             vertical: 15,
@@ -947,8 +1261,13 @@ class _CreatePostRequestScreenState extends State<CreatePostRequestScreen> {
                                               ),
                                               10.width,
                                               Text(
-                                                selectedTime != null ? selectedTime!.format(context) : language.selectTime,
-                                                style: boldTextStyle(color: context.primaryColor),
+                                                selectedTime != null
+                                                    ? selectedTime!
+                                                        .format(context)
+                                                    : language.selectTime,
+                                                style: boldTextStyle(
+                                                    color:
+                                                        context.primaryColor),
                                               ),
                                             ],
                                           ),
@@ -1107,7 +1426,8 @@ class _CreatePostRequestScreenState extends State<CreatePostRequestScreen> {
                             decoration: boxDecorationWithRoundedCorners(
                               backgroundColor: context.cardColor,
                             ),
-                            padding: EdgeInsets.symmetric(vertical: 20, horizontal: 10),
+                            padding: EdgeInsets.symmetric(
+                                vertical: 20, horizontal: 10),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -1127,10 +1447,12 @@ class _CreatePostRequestScreenState extends State<CreatePostRequestScreen> {
                                 10.height,
                                 Container(
                                   decoration: boxDecorationDefault(),
-                                  padding: EdgeInsets.symmetric(vertical: 15, horizontal: 10),
+                                  padding: EdgeInsets.symmetric(
+                                      vertical: 15, horizontal: 10),
                                   child: appStore.tempAddress != null
                                       ? Row(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
                                           children: [
                                             Icon(
                                               Iconsax.location,
@@ -1138,7 +1460,8 @@ class _CreatePostRequestScreenState extends State<CreatePostRequestScreen> {
                                             ).paddingSymmetric(horizontal: 5),
                                             Flexible(
                                                 child: Text(
-                                              appStore.tempAddress!.address.validate(),
+                                              appStore.tempAddress!.address
+                                                  .validate(),
                                               style: secondaryTextStyle(),
                                             ))
                                           ],
@@ -1168,7 +1491,8 @@ class _CreatePostRequestScreenState extends State<CreatePostRequestScreen> {
                           CustomImagePicker(
                             key: uniqueKey,
                             onRemoveClick: (value) {
-                              if (tempAttachments.validate().isNotEmpty && imageFiles.isNotEmpty) {
+                              if (tempAttachments.validate().isNotEmpty &&
+                                  imageFiles.isNotEmpty) {
                                 showConfirmDialogCustom(
                                   context,
                                   dialogType: DialogType.DELETE,
@@ -1176,9 +1500,16 @@ class _CreatePostRequestScreenState extends State<CreatePostRequestScreen> {
                                   positiveText: language.lblDelete,
                                   negativeText: language.lblCancel,
                                   onAccept: (p0) {
-                                    imageFiles.removeWhere((element) => element.path == value);
+                                    imageFiles.removeWhere(
+                                        (element) => element.path == value);
                                     if (value.startsWith('http')) {
-                                      removeAttachment(id: tempAttachments.validate().firstWhere((element) => element.url == value).id.validate());
+                                      removeAttachment(
+                                          id: tempAttachments
+                                              .validate()
+                                              .firstWhere((element) =>
+                                                  element.url == value)
+                                              .id
+                                              .validate());
                                     }
                                   },
                                 );
@@ -1190,7 +1521,8 @@ class _CreatePostRequestScreenState extends State<CreatePostRequestScreen> {
                                   positiveText: language.lblDelete,
                                   negativeText: language.lblCancel,
                                   onAccept: (p0) {
-                                    imageFiles.removeWhere((element) => element.path == value);
+                                    imageFiles.removeWhere(
+                                        (element) => element.path == value);
                                     // if (isUpdate) {
                                     //   uniqueKey = UniqueKey();
                                     // }
@@ -1199,7 +1531,10 @@ class _CreatePostRequestScreenState extends State<CreatePostRequestScreen> {
                                 );
                               }
                             },
-                            selectedImages: imageFiles.validate().map((e) => e.path.validate()).toList(),
+                            selectedImages: imageFiles
+                                .validate()
+                                .map((e) => e.path.validate())
+                                .toList(),
                             onFileSelected: (List<File> files) async {
                               imageFiles = files;
                               setState(() {});
@@ -1219,10 +1554,16 @@ class _CreatePostRequestScreenState extends State<CreatePostRequestScreen> {
                               Expanded(
                                 flex: 2,
                                 child: Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 0),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 20.0, vertical: 0),
                                   child: AppButton(
                                     child: Text(
-                                      appStore.currentBookingStep == 0 ? language.btnNext : (appStore.selectedLanguageCode == 'en' ? 'Find Hands' : 'إبحث الآن'),
+                                      appStore.currentBookingStep == 0
+                                          ? language.btnNext
+                                          : (appStore.selectedLanguageCode ==
+                                                  'en'
+                                              ? 'Find Hands'
+                                              : 'إبحث الآن'),
                                       style: boldTextStyle(color: black),
                                     ),
                                     color: white,
@@ -1238,7 +1579,8 @@ class _CreatePostRequestScreenState extends State<CreatePostRequestScreen> {
                                       } else {
                                         hideKeyboard(context);
                                         if (appStore.tempAddress == null) {
-                                          toast(language.pleaseEnterYourAddress);
+                                          toast(
+                                              language.pleaseEnterYourAddress);
                                           setState(() {});
                                           return;
                                         }

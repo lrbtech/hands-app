@@ -37,7 +37,7 @@ Widget customTopearnerMonth(BuildContext context) {
                 Text(
                   "Top Earner of Week!",
                   style: GoogleFonts.almarai(
-                    fontSize: 20,
+                    fontSize: 18,
                     fontWeight: FontWeight.w700,
                     color: Theme.of(context).colorScheme.onSecondary,
                   ),
@@ -79,7 +79,7 @@ Widget iconsText(IconData icon, Color iconColor, String name) {
   return Row(
     mainAxisSize: MainAxisSize.min,
     children: [
-      Icon(icon, color: iconColor, size: 30),
+      Icon(icon, color: iconColor, size: 22),
       const SizedBox(width: 5),
       Text(
         name,

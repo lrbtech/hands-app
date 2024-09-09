@@ -565,6 +565,7 @@ class _DashboardFragmentState extends State<DashboardFragment> {
                       // ),
                       // 10.height,
                       Container(
+                        padding: EdgeInsets.only(left: 10, right: 10),
                         child: SizedBox(
                           height: MediaQuery.of(context).size.height -
                               MediaQuery.of(context).size.height * 0.3,
@@ -829,7 +830,7 @@ class _DashboardFragmentState extends State<DashboardFragment> {
                                       children: [
                                         Text(
                                           textAlign: TextAlign.center,
-                                          "Start Earning Money by Heping People!",
+                                          "Start Earning Money by Helping People!",
                                           style: boldTextStyle(
                                               color: appStore.isDarkMode
                                                   ? white
@@ -888,6 +889,7 @@ class _DashboardFragmentState extends State<DashboardFragment> {
                                 padding: const EdgeInsets.all(10.0),
                                 child: TotalRevenueWidget(),
                               ),
+                              40.height
                             ],
                           ),
                         ),

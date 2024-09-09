@@ -609,69 +609,69 @@ class ProfileFragmentState extends State<ProfileFragment> {
                         ).visible(appStore.isLoggedIn),
                         // 30.height.visible(!appStore.isLoggedIn),
                         // 30.height.visible(appStore.isLoggedIn),
-                        20.height,
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 20),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              // if (getStringAsync(FACEBOOK_URL).isNotEmpty)
-                              IconButton(
-                                icon: Image.asset(ic_facebook, height: 35),
-                                onPressed: () {
-                                  commonLaunchUrl(
-                                      'https://www.facebook.com/profile.php?id=61559767691065',
-                                      launchMode:
-                                          LaunchMode.externalApplication);
-                                },
-                              ),
-                              // if (getStringAsync(INSTAGRAM_URL).isNotEmpty)
-                              IconButton(
-                                icon: Image.asset(ic_instagram, height: 35),
-                                onPressed: () {
-                                  commonLaunchUrl(
-                                      'https://www.instagram.com/handsappuae/',
-                                      launchMode:
-                                          LaunchMode.externalApplication);
-                                  // commonLaunchUrl(getStringAsync(INSTAGRAM_URL), launchMode: LaunchMode.externalApplication);
-                                },
-                              ),
-                              // if (getStringAsync(TWITTER_URL).isNotEmpty)
-                              IconButton(
-                                icon: Image.asset(ic_x, height: 35),
-                                onPressed: () {
-                                  commonLaunchUrl('https://x.com/handsappuae',
-                                      launchMode:
-                                          LaunchMode.externalApplication);
-                                  // commonLaunchUrl(getStringAsync(TWITTER_URL), launchMode: LaunchMode.externalApplication);
-                                },
-                              ),
-                              // if (getStringAsync(LINKEDIN_URL).isNotEmpty)
-                              IconButton(
-                                icon: Image.asset(ic_snapchat, height: 35),
-                                onPressed: () {
-                                  commonLaunchUrl(
-                                      'https://www.snapchat.com/add/handsappuae',
-                                      launchMode:
-                                          LaunchMode.externalApplication);
-                                  // commonLaunchUrl(getStringAsync(LINKEDIN_URL), launchMode: LaunchMode.externalApplication);
-                                },
-                              ),
-                              // if (getStringAsync(YOUTUBE_URL).isNotEmpty)
-                              IconButton(
-                                icon: Image.asset(ic_tiktok, height: 35),
-                                onPressed: () {
-                                  commonLaunchUrl(
-                                      'https://www.tiktok.com/@handsappuae?lang=en',
-                                      launchMode:
-                                          LaunchMode.externalApplication);
-                                  // commonLaunchUrl(getStringAsync(YOUTUBE_URL), launchMode: LaunchMode.externalApplication);
-                                },
-                              ),
-                            ],
-                          ),
-                        ),
-                        80.height,
+                        50.height,
+                        // Padding(
+                        //   padding: const EdgeInsets.symmetric(horizontal: 20),
+                        //   child: Row(
+                        //     mainAxisAlignment: MainAxisAlignment.center,
+                        //     children: [
+                        //       // if (getStringAsync(FACEBOOK_URL).isNotEmpty)
+                        //       IconButton(
+                        //         icon: Image.asset(ic_facebook, height: 35),
+                        //         onPressed: () {
+                        //           commonLaunchUrl(
+                        //               'https://www.facebook.com/profile.php?id=61559767691065',
+                        //               launchMode:
+                        //                   LaunchMode.externalApplication);
+                        //         },
+                        //       ),
+                        //       // if (getStringAsync(INSTAGRAM_URL).isNotEmpty)
+                        //       IconButton(
+                        //         icon: Image.asset(ic_instagram, height: 35),
+                        //         onPressed: () {
+                        //           commonLaunchUrl(
+                        //               'https://www.instagram.com/handsappuae/',
+                        //               launchMode:
+                        //                   LaunchMode.externalApplication);
+                        //           // commonLaunchUrl(getStringAsync(INSTAGRAM_URL), launchMode: LaunchMode.externalApplication);
+                        //         },
+                        //       ),
+                        //       // if (getStringAsync(TWITTER_URL).isNotEmpty)
+                        //       IconButton(
+                        //         icon: Image.asset(ic_x, height: 35),
+                        //         onPressed: () {
+                        //           commonLaunchUrl('https://x.com/handsappuae',
+                        //               launchMode:
+                        //                   LaunchMode.externalApplication);
+                        //           // commonLaunchUrl(getStringAsync(TWITTER_URL), launchMode: LaunchMode.externalApplication);
+                        //         },
+                        //       ),
+                        //       // if (getStringAsync(LINKEDIN_URL).isNotEmpty)
+                        //       IconButton(
+                        //         icon: Image.asset(ic_snapchat, height: 35),
+                        //         onPressed: () {
+                        //           commonLaunchUrl(
+                        //               'https://www.snapchat.com/add/handsappuae',
+                        //               launchMode:
+                        //                   LaunchMode.externalApplication);
+                        //           // commonLaunchUrl(getStringAsync(LINKEDIN_URL), launchMode: LaunchMode.externalApplication);
+                        //         },
+                        //       ),
+                        //       // if (getStringAsync(YOUTUBE_URL).isNotEmpty)
+                        //       IconButton(
+                        //         icon: Image.asset(ic_tiktok, height: 35),
+                        //         onPressed: () {
+                        //           commonLaunchUrl(
+                        //               'https://www.tiktok.com/@handsappuae?lang=en',
+                        //               launchMode:
+                        //                   LaunchMode.externalApplication);
+                        //           // commonLaunchUrl(getStringAsync(YOUTUBE_URL), launchMode: LaunchMode.externalApplication);
+                        //         },
+                        //       ),
+                        //     ],
+                        //   ),
+                        // ),
+                        // 80.height,
                       ],
                     );
                   }),
@@ -716,38 +716,39 @@ class ProfileFragmentState extends State<ProfileFragment> {
   }
 
   Widget _buildProfileCard(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 12, right: 12, bottom: 20),
-      child: Container(
-        height: 201,
-        width: 351,
-        decoration: BoxDecoration(
-          boxShadow: [
-            BoxShadow(
-              offset: const Offset(0, 2),
-              blurRadius: 1,
-              color: Theme.of(context).colorScheme.onPrimaryContainer,
-            )
-          ],
-          borderRadius: BorderRadius.circular(30),
-          gradient: const LinearGradient(
-            colors: [
-              Color.fromARGB(225, 250, 249, 246),
-              Color.fromARGB(255, 0, 12, 44),
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.only(left: 12, right: 12, bottom: 20),
+        child: Container(
+          height: 201,
+          decoration: BoxDecoration(
+            boxShadow: [
+              BoxShadow(
+                offset: const Offset(0, 2),
+                blurRadius: 1,
+                color: Theme.of(context).colorScheme.onPrimaryContainer,
+              )
             ],
-            begin: Alignment.bottomCenter,
-            end: Alignment.topCenter,
+            borderRadius: BorderRadius.circular(30),
+            gradient: const LinearGradient(
+              colors: [
+                Color.fromARGB(225, 250, 249, 246),
+                Color.fromARGB(255, 0, 12, 44),
+              ],
+              begin: Alignment.bottomCenter,
+              end: Alignment.topCenter,
+            ),
           ),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _buildStarRating(),
-            const SizedBox(height: 20),
-            _buildProfileDetails(),
-            const SizedBox(height: 15),
-            _buildBalanceDetails(),
-          ],
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _buildStarRating(),
+              const SizedBox(height: 20),
+              _buildProfileDetails(),
+              const SizedBox(height: 15),
+              _buildBalanceDetails(),
+            ],
+          ),
         ),
       ),
     );

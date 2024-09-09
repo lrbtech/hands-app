@@ -231,9 +231,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           : SignInScreen(isFromDashboard: true))));
         },
         screen: Observer(
-            builder: (context) => appStore.isLoggedIn
-                ? BookingFragment()
-                : SignInScreen(isFromDashboard: true)),
+            builder: (context) =>
+                appStore.isLoggedIn ? BookingFragment() : DashboardFragment()),
         item: ItemConfig(
           icon: Icon(
             Icons.abc,

@@ -57,7 +57,11 @@ Widget customDialogContainer(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 network == true
-                    ? Image.file(File(imagePath))
+                    ? Image.file(
+                        File(imagePath),
+                        width: 50,
+                        height: 50,
+                      )
                     : Image.asset(imagePath),
                 Text(
                   buttonText,

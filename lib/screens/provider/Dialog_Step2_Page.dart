@@ -23,7 +23,7 @@ class _Step2State extends State<Step2> {
   captureFiles(int types) async {
     _picker
         .pickImage(
-      source: ImageSource.gallery,
+      source: types == 2 ? ImageSource.camera : ImageSource.gallery,
     )
         .then((XFile? recordedVideo) {
       if (recordedVideo != null && recordedVideo.path != null) {
