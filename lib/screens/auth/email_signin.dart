@@ -211,8 +211,16 @@ class _EmailSinginScreenState extends State<EmailSinginScreen>
   }
 
   void onLoginSuccessRedirection() {
-    DashboardScreen().launch(context,
-        isNewTask: true, pageRouteAnimation: PageRouteAnimation.Fade);
+    Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
+      MaterialPageRoute(
+        builder: (BuildContext context) {
+          return DashboardScreen();
+        },
+      ),
+      (_) => false,
+    );
+    // DashboardScreen().launch(context,
+    //     isNewTask: true, pageRouteAnimation: PageRouteAnimation.Fade);
 
     appStore.setLoading(false);
   }
