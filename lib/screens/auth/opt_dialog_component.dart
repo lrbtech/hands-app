@@ -37,11 +37,16 @@ class _OtpDialogComponentState extends State<OtpDialogComponent> {
     defaultPinTheme = pinput.PinTheme(
       width: 60,
       height: 60,
-      constraints: BoxConstraints(maxHeight: 60, minHeight: 60, maxWidth: 60, minWidth: 60),
-      textStyle: TextStyle(fontSize: 20, color: primaryColor, fontWeight: FontWeight.w600),
+      constraints: BoxConstraints(
+          maxHeight: 60, minHeight: 60, maxWidth: 60, minWidth: 60),
+      textStyle: TextStyle(
+          fontSize: 20, color: primaryColor, fontWeight: FontWeight.w600),
       decoration: BoxDecoration(
         color: appStore.isDarkMode ? cardColor : Colors.grey.shade200,
-        border: 1 == 2 ? null : Border.all(color: const Color.fromRGBO(234, 239, 243, 1), width: 1),
+        border: 1 == 2
+            ? null
+            : Border.all(
+                color: const Color.fromRGBO(234, 239, 243, 1), width: 1),
         borderRadius: BorderRadius.circular(50),
       ),
     );
@@ -85,7 +90,10 @@ class _OtpDialogComponentState extends State<OtpDialogComponent> {
         textSize: APP_BAR_TEXT_SIZE,
         elevation: 0,
         color: context.scaffoldBackgroundColor,
-        systemUiOverlayStyle: SystemUiOverlayStyle(statusBarIconBrightness: appStore.isDarkMode ? Brightness.light : Brightness.dark, statusBarColor: context.scaffoldBackgroundColor),
+        systemUiOverlayStyle: SystemUiOverlayStyle(
+            statusBarIconBrightness:
+                appStore.isDarkMode ? Brightness.light : Brightness.dark,
+            statusBarColor: context.scaffoldBackgroundColor),
       ),
       body: Stack(
         children: [
@@ -99,8 +107,13 @@ class _OtpDialogComponentState extends State<OtpDialogComponent> {
                   children: [
                     Flexible(
                       child: Text(
-                        appStore.selectedLanguageCode == 'en' ? 'Enter your 5 digit code' : 'أدخل الرمز الخاص بك المكون من 5 أرقام',
-                        style: boldTextStyle(size: 28, color: appStore.isDarkMode ? null : Color(0xFF0C1B54)),
+                        appStore.selectedLanguageCode == 'en'
+                            ? 'Enter your 5 digit code'
+                            : 'أدخل الرمز الخاص بك المكون من 5 أرقام',
+                        style: boldTextStyle(
+                            size: 28,
+                            color:
+                                appStore.isDarkMode ? null : Color(0xFF0C1B54)),
                       ),
                     ),
                   ],
@@ -111,7 +124,9 @@ class _OtpDialogComponentState extends State<OtpDialogComponent> {
                   children: [
                     Flexible(
                       child: Text(
-                        appStore.selectedLanguageCode == 'en' ? 'Please Check your messages and enter your 5 digit code' : 'يرجى التحقق من رسائلك وإدخال الرمز المكون من 5 أرقام',
+                        appStore.selectedLanguageCode == 'en'
+                            ? 'Please Check your messages and enter your 5 digit code'
+                            : 'يرجى التحقق من رسائلك وإدخال الرمز المكون من 5 أرقام',
                         style: primaryTextStyle(size: 15),
                       ),
                     ),
@@ -134,8 +149,10 @@ class _OtpDialogComponentState extends State<OtpDialogComponent> {
                                 // validator: (value) {
                                 //   return value == authController.otpResponse?.otp ? null : null;
                                 // },
-                                androidSmsAutofillMethod: pinput.AndroidSmsAutofillMethod.smsRetrieverApi,
-                                pinputAutovalidateMode: PinputAutovalidateMode.disabled,
+                                androidSmsAutofillMethod: pinput
+                                    .AndroidSmsAutofillMethod.smsRetrieverApi,
+                                pinputAutovalidateMode:
+                                    PinputAutovalidateMode.disabled,
                                 showCursor: true,
                                 onChanged: (value) => setState(() {
                                   otpCode = value;
@@ -154,7 +171,8 @@ class _OtpDialogComponentState extends State<OtpDialogComponent> {
                       : OTPTextField(
                           pinLength: 5,
                           textStyle: primaryTextStyle(),
-                          boxDecoration: BoxDecoration(borderRadius: BorderRadius.circular(100)),
+                          boxDecoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(100)),
                           fieldWidth: 45,
                           cursorColor: primaryColor,
                           decoration: inputDecoration(
@@ -180,8 +198,8 @@ class _OtpDialogComponentState extends State<OtpDialogComponent> {
                     submitOtp();
                   },
                   text: language.confirm,
-                  color: primaryColor,
-                  textColor: Colors.white,
+                  color: white,
+                  textColor: primaryColor,
                   width: context.width(),
                 ),
               ],

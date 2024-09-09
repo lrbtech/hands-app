@@ -514,11 +514,11 @@ class _SignInScreenState extends State<SignInScreen>
                               SizedBox(
                                   child: _buildSocialWidget()
                                       .paddingSymmetric(horizontal: 20)),
-                              // 30.height,
+                              80.height,
                             ],
                           ),
                         ),
-                        SignUpScreen().paddingSymmetric(horizontal: 14)
+                        SignUpScreen().paddingSymmetric(horizontal: 14),
                       ],
                     ),
                   ),

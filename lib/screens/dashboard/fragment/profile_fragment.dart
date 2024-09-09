@@ -1,4 +1,5 @@
 import 'package:flutter/widgets.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:hands_user_app/component/cached_image_widget.dart';
 import 'package:hands_user_app/component/loader_widget.dart';
 import 'package:hands_user_app/main.dart';
@@ -12,6 +13,8 @@ import 'package:hands_user_app/screens/contact_us/contact_us.dart';
 import 'package:hands_user_app/screens/dashboard/customer_rating_screen.dart';
 import 'package:hands_user_app/screens/dashboard/dashboard_screen.dart';
 import 'package:hands_user_app/screens/jobRequest/my_post_request_list_screen.dart';
+import 'package:hands_user_app/screens/provider/Colors.dart';
+import 'package:hands_user_app/screens/provider/Widgets/Image_Urls.dart';
 import 'package:hands_user_app/screens/setting_screen.dart';
 import 'package:hands_user_app/screens/wallet/user_wallet_balance_screen.dart';
 import 'package:hands_user_app/utils/colors.dart';
@@ -83,7 +86,9 @@ class ProfileFragmentState extends State<ProfileFragment> {
         showBack: false,
         actions: [
           IconButton(
-            icon: ic_setting.iconImage(color: appStore.isDarkMode ? white : context.primaryColor, size: 20),
+            icon: ic_setting.iconImage(
+                color: appStore.isDarkMode ? white : context.primaryColor,
+                size: 20),
             onPressed: () async {
               SettingScreen().launch(context);
             },
@@ -102,102 +107,114 @@ class ProfileFragmentState extends State<ProfileFragment> {
                 ),
                 // crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  if (appStore.isLoggedIn)
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 14.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          24.height,
-                          // Stack(
-                          //   alignment: Alignment.bottomRight,
-                          //   children: [
-                          //     Container(
-                          //       decoration: boxDecorationDefault(
-                          //         border: Border.all(color: primaryColor, width: 3),
-                          //         shape: BoxShape.circle,
-                          //       ),
-                          //       child: Container(
-                          //         decoration: boxDecorationDefault(
-                          //           border: Border.all(color: context.scaffoldBackgroundColor, width: 4),
-                          //           shape: BoxShape.circle,
-                          //         ),
-                          //         child: CachedImageWidget(
-                          //           url: appStore.userProfileImage,
-                          //           height: 90,
-                          //           width: 90,
-                          //           fit: BoxFit.cover,
-                          //           radius: 60,
-                          //         ),
-                          //       ),
-                          //     ),
-                          //     Positioned(
-                          //       bottom: 0,
-                          //       right: 8,
-                          //       child: Container(
-                          //         alignment: Alignment.center,
-                          //         padding: EdgeInsets.all(6),
-                          //         decoration: boxDecorationDefault(
-                          //           shape: BoxShape.circle,
-                          //           color: primaryColor,
-                          //           border: Border.all(color: context.cardColor, width: 2),
-                          //         ),
-                          //         child: Icon(AntDesign.edit, color: white, size: 18),
-                          //       ).onTap(() {
-                          //         EditProfileScreen().launch(context);
-                          //       }),
-                          //     ),
-                          //   ],
-                          // ),
-                          Container(
-                            decoration: boxDecorationDefault(
-                              border: Border.all(color: context.primaryColor, width: 2),
-                              shape: BoxShape.circle,
-                            ),
-                            child: CachedImageWidget(
-                              url: appStore.userProfileImage,
-                              height: 90,
-                              width: 90,
-                              fit: BoxFit.cover,
-                              radius: 60,
-                            ),
-                          ),
-                          10.height,
-                          Row(
-                            children: [
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(appStore.userFullName, style: boldTextStyle(color: appStore.isDarkMode ? white : primaryColor, size: 20)),
-                                    Text(appStore.userEmail, style: boldTextStyle(size: 14, color: Color(0xFF6D7698))),
-                                  ],
-                                ),
-                              ),
-                              GestureDetector(
-                                onTap: () => EditProfileScreen().launch(context),
-                                child: CircleAvatar(
-                                  backgroundColor: primaryColor,
-                                  child: Icon(
-                                    Icons.edit,
-                                    color: white,
-                                  ),
-                                ),
-                              ),
-                              // AppButton(
-                              //   onTap: () => EditProfileScreen().launch(context),
-                              //   color: primaryColor,
-                              //   enableScaleAnimation: false,
-                              //   text: language.editProfile,
-                              //   height: 40,
-                              //   width: 120,
-                              // )
-                            ],
-                          ),
-                          24.height,
-                        ],
-                      ),
-                    ),
+                  if (appStore.isLoggedIn) _buildProfileCard(context),
+                  // Padding(
+                  //   padding: const EdgeInsets.symmetric(horizontal: 14.0),
+                  //   child: Column(
+                  //     crossAxisAlignment: CrossAxisAlignment.start,
+                  //     children: [
+                  //       24.height,
+                  //       // Stack(
+                  //       //   alignment: Alignment.bottomRight,
+                  //       //   children: [
+                  //       //     Container(
+                  //       //       decoration: boxDecorationDefault(
+                  //       //         border: Border.all(color: primaryColor, width: 3),
+                  //       //         shape: BoxShape.circle,
+                  //       //       ),
+                  //       //       child: Container(
+                  //       //         decoration: boxDecorationDefault(
+                  //       //           border: Border.all(color: context.scaffoldBackgroundColor, width: 4),
+                  //       //           shape: BoxShape.circle,
+                  //       //         ),
+                  //       //         child: CachedImageWidget(
+                  //       //           url: appStore.userProfileImage,
+                  //       //           height: 90,
+                  //       //           width: 90,
+                  //       //           fit: BoxFit.cover,
+                  //       //           radius: 60,
+                  //       //         ),
+                  //       //       ),
+                  //       //     ),
+                  //       //     Positioned(
+                  //       //       bottom: 0,
+                  //       //       right: 8,
+                  //       //       child: Container(
+                  //       //         alignment: Alignment.center,
+                  //       //         padding: EdgeInsets.all(6),
+                  //       //         decoration: boxDecorationDefault(
+                  //       //           shape: BoxShape.circle,
+                  //       //           color: primaryColor,
+                  //       //           border: Border.all(color: context.cardColor, width: 2),
+                  //       //         ),
+                  //       //         child: Icon(AntDesign.edit, color: white, size: 18),
+                  //       //       ).onTap(() {
+                  //       //         EditProfileScreen().launch(context);
+                  //       //       }),
+                  //       //     ),
+                  //       //   ],
+                  //       // ),
+
+                  //       // Container(
+                  //       //   decoration: boxDecorationDefault(
+                  //       //     border: Border.all(
+                  //       //         color: context.primaryColor, width: 2),
+                  //       //     shape: BoxShape.circle,
+                  //       //   ),
+                  //       //   child: CachedImageWidget(
+                  //       //     url: appStore.userProfileImage,
+                  //       //     height: 90,
+                  //       //     width: 90,
+                  //       //     fit: BoxFit.cover,
+                  //       //     radius: 60,
+                  //       //   ),
+                  //       // ),
+                  //       // 10.height,
+                  //       // Row(
+                  //       //   children: [
+                  //       //     Expanded(
+                  //       //       child: Column(
+                  //       //         crossAxisAlignment: CrossAxisAlignment.start,
+                  //       //         children: [
+                  //       //           Text(appStore.userFullName,
+                  //       //               style: boldTextStyle(
+                  //       //                   color: appStore.isDarkMode
+                  //       //                       ? white
+                  //       //                       : primaryColor,
+                  //       //                   size: 20)),
+                  //       //           Text(appStore.userEmail,
+                  //       //               style: boldTextStyle(
+                  //       //                   size: 14,
+                  //       //                   color: Color(0xFF6D7698))),
+                  //       //         ],
+                  //       //       ),
+                  //       //     ),
+                  //       //     // GestureDetector(
+                  //       //     //   onTap: () =>
+                  //       //     //       EditProfileScreen().launch(context),
+                  //       //     //   child: CircleAvatar(
+                  //       //     //     backgroundColor: primaryColor,
+                  //       //     //     child: Icon(
+                  //       //     //       Icons.edit,
+                  //       //     //       color: white,
+                  //       //     //     ),
+                  //       //     //   ),
+                  //       //     // ),
+                  //       //     // AppButton(
+                  //       //     //   onTap: () => EditProfileScreen().launch(context),
+                  //       //     //   color: primaryColor,
+                  //       //     //   enableScaleAnimation: false,
+                  //       //     //   text: language.editProfile,
+                  //       //     //   height: 40,
+                  //       //     //   width: 120,
+                  //       //     // )
+                  //       //   ],
+                  //       // ),
+                  //       // 24.height,
+                  //     ],
+                  //   ),
+                  // ),
+
                   Observer(builder: (context) {
                     return Column(
                       // title: Text(language.lblGENERAL, style: boldTextStyle(color: primaryColor)),
@@ -207,7 +224,8 @@ class ProfileFragmentState extends State<ProfileFragment> {
                       children: [
                         if (appStore.isLoggedIn && appStore.isEnableUserWallet)
                           SettingItemWidget(
-                            leading: ic_un_fill_wallet.iconImage(size: SETTING_ICON_SIZE),
+                            leading: ic_un_fill_wallet.iconImage(
+                                size: SETTING_ICON_SIZE),
                             title: language.walletBalance,
                             onTap: () {
                               UserWalletBalanceScreen().launch(context);
@@ -234,7 +252,8 @@ class ProfileFragmentState extends State<ProfileFragment> {
                           ),
                         if (appStore.isLoggedIn && appStore.isEnableUserWallet)
                           SettingItemWidget(
-                            leading: ic_document.iconImage(size: SETTING_ICON_SIZE),
+                            leading:
+                                ic_document.iconImage(size: SETTING_ICON_SIZE),
                             title: language.walletHistory,
                             trailing: trailing,
                             onTap: () {
@@ -243,30 +262,35 @@ class ProfileFragmentState extends State<ProfileFragment> {
                           ),
                         if (appStore.isLoggedIn && appStore.isEnableUserWallet)
                           Divider(
-                            color: appStore.isDarkMode ? context.cardColor : null,
+                            color:
+                                appStore.isDarkMode ? context.cardColor : null,
                             thickness: 1,
                             height: 0,
                           ).paddingSymmetric(horizontal: 10),
                         if (appStore.isLoggedIn)
                           SettingItemWidget(
-                            leading: Icon(Iconsax.location, size: SETTING_ICON_SIZE),
+                            leading:
+                                Icon(Iconsax.location, size: SETTING_ICON_SIZE),
                             title: language.lblYourAddress,
                             trailing: trailing,
                             onTap: () {
                               doIfLoggedIn(context, () {
-                                AddressesScreen(fromDashboard: true).launch(context);
+                                AddressesScreen(fromDashboard: true)
+                                    .launch(context);
                               });
                             },
                           ),
                         if (appStore.isLoggedIn)
                           Divider(
-                            color: appStore.isDarkMode ? context.cardColor : null,
+                            color:
+                                appStore.isDarkMode ? context.cardColor : null,
                             thickness: 1,
                             height: 0,
                           ).paddingSymmetric(horizontal: 10),
                         if (appStore.isLoggedIn)
                           SettingItemWidget(
-                            leading: ic_document.iconImage(size: SETTING_ICON_SIZE),
+                            leading:
+                                ic_document.iconImage(size: SETTING_ICON_SIZE),
                             title: language.myPostJobList,
                             trailing: trailing,
                             onTap: () async {
@@ -277,7 +301,8 @@ class ProfileFragmentState extends State<ProfileFragment> {
                           ),
                         if (appStore.isLoggedIn)
                           Divider(
-                            color: appStore.isDarkMode ? context.cardColor : null,
+                            color:
+                                appStore.isDarkMode ? context.cardColor : null,
                             thickness: 1,
                             height: 0,
                           ).paddingSymmetric(horizontal: 10),
@@ -320,7 +345,8 @@ class ProfileFragmentState extends State<ProfileFragment> {
                         ).paddingSymmetric(horizontal: 10),
                         if (otherSettingStore.blogEnable.getBoolInt())
                           SettingItemWidget(
-                            leading: ic_document.iconImage(size: SETTING_ICON_SIZE),
+                            leading:
+                                ic_document.iconImage(size: SETTING_ICON_SIZE),
                             title: language.blogs,
                             trailing: trailing,
                             onTap: () {
@@ -329,7 +355,8 @@ class ProfileFragmentState extends State<ProfileFragment> {
                           ),
                         if (otherSettingStore.blogEnable.getBoolInt())
                           Divider(
-                            color: appStore.isDarkMode ? context.cardColor : null,
+                            color:
+                                appStore.isDarkMode ? context.cardColor : null,
                             thickness: 1,
                             height: 0,
                           ).paddingSymmetric(horizontal: 10),
@@ -375,7 +402,8 @@ class ProfileFragmentState extends State<ProfileFragment> {
                           height: 0,
                         ).paddingSymmetric(horizontal: 10),
                         SettingItemWidget(
-                          leading: ic_about_us.iconImage(size: SETTING_ICON_SIZE),
+                          leading:
+                              ic_about_us.iconImage(size: SETTING_ICON_SIZE),
                           title: language.lblAboutApp,
                           trailing: trailing,
                           onTap: () {
@@ -389,16 +417,25 @@ class ProfileFragmentState extends State<ProfileFragment> {
                           height: 0,
                         ).paddingSymmetric(horizontal: 10),
                         SettingItemWidget(
-                          leading: ic_shield_done.iconImage(size: SETTING_ICON_SIZE),
+                          leading:
+                              ic_shield_done.iconImage(size: SETTING_ICON_SIZE),
                           title: language.privacyPolicy,
                           trailing: trailing,
                           onTap: () {
                             if (appStore.selectedLanguageCode == 'en') {
-                              appStore.setPrivacyPolicy(cachedDashboardResponse?.privacyPolicy?.value.validate() ?? PRIVACY_POLICY_URL);
+                              appStore.setPrivacyPolicy(cachedDashboardResponse
+                                      ?.privacyPolicy?.value
+                                      .validate() ??
+                                  PRIVACY_POLICY_URL);
                             } else {
-                              appStore.setPrivacyPolicy(cachedDashboardResponse?.privacyPolicy?.valueAr.validate() ?? PRIVACY_POLICY_URL);
+                              appStore.setPrivacyPolicy(cachedDashboardResponse
+                                      ?.privacyPolicy?.valueAr
+                                      .validate() ??
+                                  PRIVACY_POLICY_URL);
                             }
-                            checkIfLink(context, appStore.privacyPolicy.validate(), title: language.privacyPolicy);
+                            checkIfLink(
+                                context, appStore.privacyPolicy.validate(),
+                                title: language.privacyPolicy);
                           },
                         ),
                         Divider(
@@ -407,16 +444,25 @@ class ProfileFragmentState extends State<ProfileFragment> {
                           height: 0,
                         ).paddingSymmetric(horizontal: 10),
                         SettingItemWidget(
-                          leading: ic_document.iconImage(size: SETTING_ICON_SIZE),
+                          leading:
+                              ic_document.iconImage(size: SETTING_ICON_SIZE),
                           title: language.termsCondition,
                           trailing: trailing,
                           onTap: () {
                             if (appStore.selectedLanguageCode == 'en') {
-                              appStore.setTermConditions(cachedDashboardResponse?.termConditions?.value.validate() ?? TERMS_CONDITION_URL);
+                              appStore.setTermConditions(cachedDashboardResponse
+                                      ?.termConditions?.value
+                                      .validate() ??
+                                  TERMS_CONDITION_URL);
                             } else {
-                              appStore.setTermConditions(cachedDashboardResponse?.termConditions?.valueAr.validate() ?? TERMS_CONDITION_URL);
+                              appStore.setTermConditions(cachedDashboardResponse
+                                      ?.termConditions?.valueAr
+                                      .validate() ??
+                                  TERMS_CONDITION_URL);
                             }
-                            checkIfLink(context, appStore.termConditions.validate(), title: language.termsCondition);
+                            checkIfLink(
+                                context, appStore.termConditions.validate(),
+                                title: language.termsCondition);
                           },
                         ),
                         Divider(
@@ -436,13 +482,15 @@ class ProfileFragmentState extends State<ProfileFragment> {
 
                         if (appStore.inquiryEmail.isNotEmpty)
                           Divider(
-                            color: appStore.isDarkMode ? context.cardColor : null,
+                            color:
+                                appStore.isDarkMode ? context.cardColor : null,
                             thickness: 1,
                             height: 0,
                           ).paddingSymmetric(horizontal: 10),
                         if (appStore.helplineNumber.isNotEmpty)
                           SettingItemWidget(
-                            leading: ic_calling.iconImage(size: SETTING_ICON_SIZE),
+                            leading:
+                                ic_calling.iconImage(size: SETTING_ICON_SIZE),
                             title: language.lblHelplineNumber,
                             trailing: trailing,
                             onTap: () {
@@ -457,7 +505,8 @@ class ProfileFragmentState extends State<ProfileFragment> {
 
                         // Contact form
                         SettingItemWidget(
-                          leading: ic_contact_us.iconImage(size: SETTING_ICON_SIZE),
+                          leading:
+                              ic_contact_us.iconImage(size: SETTING_ICON_SIZE),
                           title: language.lblContactUs,
                           trailing: trailing,
                           onTap: () {
@@ -468,12 +517,15 @@ class ProfileFragmentState extends State<ProfileFragment> {
 
                         if (appStore.helplineNumber.isNotEmpty)
                           Divider(
-                            color: appStore.isDarkMode ? context.cardColor : null,
+                            color:
+                                appStore.isDarkMode ? context.cardColor : null,
                             thickness: 1,
                             height: 0,
                           ).paddingSymmetric(horizontal: 10),
                         SettingItemWidget(
-                          leading: Icon(MaterialCommunityIcons.logout, color: context.iconColor, size: SETTING_ICON_SIZE),
+                          leading: Icon(MaterialCommunityIcons.logout,
+                              color: context.iconColor,
+                              size: SETTING_ICON_SIZE),
                           title: language.signIn,
                           trailing: trailing,
                           onTap: () {
@@ -483,7 +535,8 @@ class ProfileFragmentState extends State<ProfileFragment> {
                         ).visible(!appStore.isLoggedIn),
                         if (!appStore.isLoggedIn)
                           Divider(
-                            color: appStore.isDarkMode ? context.cardColor : null,
+                            color:
+                                appStore.isDarkMode ? context.cardColor : null,
                             thickness: 1,
                             height: 0,
                           ).paddingSymmetric(horizontal: 10),
@@ -494,7 +547,8 @@ class ProfileFragmentState extends State<ProfileFragment> {
                           //color: appStore.isDarkMode ? context.cardColor :null, Offstage(),
                           children: [
                             SettingItemWidget(
-                              leading: ic_delete_account.iconImage(size: SETTING_ICON_SIZE),
+                              leading: ic_delete_account.iconImage(
+                                  size: SETTING_ICON_SIZE),
                               paddingBeforeTrailing: 4,
                               title: language.lblDeleteAccount,
                               trailing: trailing,
@@ -507,15 +561,20 @@ class ProfileFragmentState extends State<ProfileFragment> {
                                     ifNotTester(() {
                                       appStore.setLoading(true);
 
-                                      deleteAccountCompletely().then((value) async {
-                                        await userService.removeDocument(appStore.uid);
+                                      deleteAccountCompletely()
+                                          .then((value) async {
+                                        await userService
+                                            .removeDocument(appStore.uid);
                                         await userService.deleteUser();
                                         setValue(IS_REMEMBERED, false);
                                         await clearPreferences();
                                         appStore.setLoading(false);
                                         toast(value.message);
 
-                                        push(DashboardScreen(), isNewTask: true, pageRouteAnimation: PageRouteAnimation.Fade);
+                                        push(DashboardScreen(),
+                                            isNewTask: true,
+                                            pageRouteAnimation:
+                                                PageRouteAnimation.Fade);
                                       }).catchError((e) {
                                         appStore.setLoading(false);
                                         toast(e.toString());
@@ -529,12 +588,16 @@ class ProfileFragmentState extends State<ProfileFragment> {
                             ).paddingOnly(left: 4),
                             if (appStore.isLoggedIn)
                               Divider(
-                                color: appStore.isDarkMode ? context.cardColor : null,
+                                color: appStore.isDarkMode
+                                    ? context.cardColor
+                                    : null,
                                 thickness: 1,
                                 height: 0,
                               ).paddingSymmetric(horizontal: 10),
                             SettingItemWidget(
-                              leading: Icon(MaterialCommunityIcons.logout, color: context.iconColor, size: SETTING_ICON_SIZE),
+                              leading: Icon(MaterialCommunityIcons.logout,
+                                  color: context.iconColor,
+                                  size: SETTING_ICON_SIZE),
                               title: language.logout,
                               trailing: trailing,
                               onTap: () async {
@@ -556,14 +619,20 @@ class ProfileFragmentState extends State<ProfileFragment> {
                               IconButton(
                                 icon: Image.asset(ic_facebook, height: 35),
                                 onPressed: () {
-                                  commonLaunchUrl('https://www.facebook.com/profile.php?id=61559767691065', launchMode: LaunchMode.externalApplication);
+                                  commonLaunchUrl(
+                                      'https://www.facebook.com/profile.php?id=61559767691065',
+                                      launchMode:
+                                          LaunchMode.externalApplication);
                                 },
                               ),
                               // if (getStringAsync(INSTAGRAM_URL).isNotEmpty)
                               IconButton(
                                 icon: Image.asset(ic_instagram, height: 35),
                                 onPressed: () {
-                                  commonLaunchUrl('https://www.instagram.com/handsappuae/', launchMode: LaunchMode.externalApplication);
+                                  commonLaunchUrl(
+                                      'https://www.instagram.com/handsappuae/',
+                                      launchMode:
+                                          LaunchMode.externalApplication);
                                   // commonLaunchUrl(getStringAsync(INSTAGRAM_URL), launchMode: LaunchMode.externalApplication);
                                 },
                               ),
@@ -571,7 +640,9 @@ class ProfileFragmentState extends State<ProfileFragment> {
                               IconButton(
                                 icon: Image.asset(ic_x, height: 35),
                                 onPressed: () {
-                                  commonLaunchUrl('https://x.com/handsappuae', launchMode: LaunchMode.externalApplication);
+                                  commonLaunchUrl('https://x.com/handsappuae',
+                                      launchMode:
+                                          LaunchMode.externalApplication);
                                   // commonLaunchUrl(getStringAsync(TWITTER_URL), launchMode: LaunchMode.externalApplication);
                                 },
                               ),
@@ -579,7 +650,10 @@ class ProfileFragmentState extends State<ProfileFragment> {
                               IconButton(
                                 icon: Image.asset(ic_snapchat, height: 35),
                                 onPressed: () {
-                                  commonLaunchUrl('https://www.snapchat.com/add/handsappuae', launchMode: LaunchMode.externalApplication);
+                                  commonLaunchUrl(
+                                      'https://www.snapchat.com/add/handsappuae',
+                                      launchMode:
+                                          LaunchMode.externalApplication);
                                   // commonLaunchUrl(getStringAsync(LINKEDIN_URL), launchMode: LaunchMode.externalApplication);
                                 },
                               ),
@@ -587,7 +661,10 @@ class ProfileFragmentState extends State<ProfileFragment> {
                               IconButton(
                                 icon: Image.asset(ic_tiktok, height: 35),
                                 onPressed: () {
-                                  commonLaunchUrl('https://www.tiktok.com/@handsappuae?lang=en', launchMode: LaunchMode.externalApplication);
+                                  commonLaunchUrl(
+                                      'https://www.tiktok.com/@handsappuae?lang=en',
+                                      launchMode:
+                                          LaunchMode.externalApplication);
                                   // commonLaunchUrl(getStringAsync(YOUTUBE_URL), launchMode: LaunchMode.externalApplication);
                                 },
                               ),
@@ -628,10 +705,205 @@ class ProfileFragmentState extends State<ProfileFragment> {
                   // ),
                 ],
               ),
-              Observer(builder: (context) => LoaderWidget().visible(appStore.isLoading)),
+              Observer(
+                  builder: (context) =>
+                      LoaderWidget().visible(appStore.isLoading)),
             ],
           );
         },
+      ),
+    );
+  }
+
+  Widget _buildProfileCard(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 12, right: 12, bottom: 20),
+      child: Container(
+        height: 201,
+        width: 351,
+        decoration: BoxDecoration(
+          boxShadow: [
+            BoxShadow(
+              offset: const Offset(0, 2),
+              blurRadius: 1,
+              color: Theme.of(context).colorScheme.onPrimaryContainer,
+            )
+          ],
+          borderRadius: BorderRadius.circular(30),
+          gradient: const LinearGradient(
+            colors: [
+              Color.fromARGB(225, 250, 249, 246),
+              Color.fromARGB(255, 0, 12, 44),
+            ],
+            begin: Alignment.bottomCenter,
+            end: Alignment.topCenter,
+          ),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _buildStarRating(),
+            const SizedBox(height: 20),
+            _buildProfileDetails(),
+            const SizedBox(height: 15),
+            _buildBalanceDetails(),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildStarRating() {
+    return Padding(
+      padding: const EdgeInsets.only(left: 89, top: 10, right: 80),
+      child: SizedBox(
+        height: 25,
+        width: 192,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: List.generate(5, (index) {
+            return Row(
+              children: [
+                Image.asset(
+                  index < 3
+                      ? AppIcons.activestarIcon
+                      : AppIcons.nonactivestarIcon,
+                  width: 20,
+                  height: 20,
+                  fit: BoxFit.cover,
+                ),
+                if (index < 4) const SizedBox(width: 6.29),
+              ],
+            );
+          }),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildProfileDetails() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 14),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Container(
+            height: 60,
+            width: 60,
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: const Color.fromARGB(255, 0, 191, 255),
+              ),
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(20),
+              child: CachedImageWidget(
+                url: appStore.userProfileImage,
+                height: 90,
+                width: 90,
+                fit: BoxFit.cover,
+                radius: 60,
+              ),
+            ),
+          ),
+          const SizedBox(width: 20),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                "${appStore.userFullName}",
+                style: GoogleFonts.workSans(
+                  color: AppColors.purewhite,
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Text(
+                '${appStore.userEmail}',
+                style: GoogleFonts.workSans(
+                  color: AppColors.greylight,
+                  fontSize: 14,
+                ),
+              ),
+              Text(
+                '+${appStore.userContactNumber}',
+                style: GoogleFonts.workSans(
+                  color: AppColors.greylight,
+                  fontSize: 14,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildBalanceDetails() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 25.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Available Balance',
+                style: GoogleFonts.workSans(
+                  color: AppColors.bgcolor,
+                  fontSize: 14,
+                ),
+              ),
+              RichText(
+                text: TextSpan(
+                  children: [
+                    TextSpan(
+                      text: 'AED ',
+                      style: GoogleFonts.workSans(
+                        color: Colors.yellow,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    TextSpan(
+                      text: '${appStore.userWalletAmount}',
+                      style: GoogleFonts.workSans(
+                        color: AppColors.darkstheme,
+                        fontSize: 25,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          _buildEditButton(),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildEditButton() {
+    return GestureDetector(
+      onTap: () => EditProfileScreen().launch(context),
+      child: Container(
+        height: 35,
+        width: 35,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: Colors.white),
+        ),
+        child: Center(
+          child: Image.asset(
+            AppIcons.editIcon,
+            fit: BoxFit.contain,
+          ),
+        ),
       ),
     );
   }

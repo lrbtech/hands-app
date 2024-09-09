@@ -50,20 +50,26 @@ class MapScreenState extends State<MapScreen> {
     bool isUpdate = widget.address != null;
 
     if (isUpdate) {
-      _selectedLatLng = LatLng(widget.address!.latitude.toDouble(), widget.address!.longitude.toDouble());
+      _selectedLatLng = LatLng(widget.address!.latitude.toDouble(),
+          widget.address!.longitude.toDouble());
       destinationAddressController.text = widget.address!.address.validate();
       _destinationAddress = destinationAddressController.text.validate();
       markers.clear();
       markers.add(Marker(
         markerId: MarkerId(_currentAddress),
-        position: LatLng(widget.address!.latitude.toDouble(), widget.address!.longitude.toDouble()),
-        infoWindow: InfoWindow(title: 'Start $_currentAddress', snippet: _destinationAddress),
+        position: LatLng(widget.address!.latitude.toDouble(),
+            widget.address!.longitude.toDouble()),
+        infoWindow: InfoWindow(
+            title: 'Start $_currentAddress', snippet: _destinationAddress),
         icon: BitmapDescriptor.defaultMarker,
       ));
       Timer(2.seconds, () {
         mapController.animateCamera(
           CameraUpdate.newCameraPosition(
-            CameraPosition(target: LatLng(widget.address!.latitude.toDouble(), widget.address!.longitude.toDouble()), zoom: 18.0),
+            CameraPosition(
+                target: LatLng(widget.address!.latitude.toDouble(),
+                    widget.address!.longitude.toDouble()),
+                zoom: 18.0),
           ),
         );
         setState(() {});
@@ -86,7 +92,9 @@ class MapScreenState extends State<MapScreen> {
       _selectedLatLng = LatLng(position.latitude, position.longitude);
       mapController.animateCamera(
         CameraUpdate.newCameraPosition(
-          CameraPosition(target: LatLng(position.latitude, position.longitude), zoom: 18.0),
+          CameraPosition(
+              target: LatLng(position.latitude, position.longitude),
+              zoom: 18.0),
         ),
       );
 
@@ -94,7 +102,8 @@ class MapScreenState extends State<MapScreen> {
       markers.add(Marker(
         markerId: MarkerId(_currentAddress),
         position: LatLng(position.latitude, position.longitude),
-        infoWindow: InfoWindow(title: 'Start $_currentAddress', snippet: _destinationAddress),
+        infoWindow: InfoWindow(
+            title: 'Start $_currentAddress', snippet: _destinationAddress),
         icon: BitmapDescriptor.defaultMarker,
       ));
 
@@ -113,7 +122,9 @@ class MapScreenState extends State<MapScreen> {
         //
       });
 
-      _currentAddress = await buildFullAddressFromLatLong(position.latitude, position.longitude).catchError((e) {
+      _currentAddress = await buildFullAddressFromLatLong(
+              position.latitude, position.longitude)
+          .catchError((e) {
         log(e);
       });
       destinationAddressController.text = _currentAddress;
@@ -137,7 +148,9 @@ class MapScreenState extends State<MapScreen> {
     ));
 
     _selectedLatLng = point;
-    destinationAddressController.text = await buildFullAddressFromLatLong(point.latitude, point.longitude).catchError((e) {
+    destinationAddressController.text =
+        await buildFullAddressFromLatLong(point.latitude, point.longitude)
+            .catchError((e) {
       log(e);
     });
 
@@ -202,7 +215,7 @@ class MapScreenState extends State<MapScreen> {
           Positioned(
             right: 0,
             left: 0,
-            bottom: 8,
+            bottom: 50,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
@@ -212,11 +225,14 @@ class MapScreenState extends State<MapScreen> {
                     ClipOval(
                       child: Material(
                         color: context.scaffoldBackgroundColor,
-                        shape: RoundedRectangleBorder(side: BorderSide(width: 1, color: primaryColor), borderRadius: BorderRadius.circular(100)),
+                        shape: RoundedRectangleBorder(
+                            side: BorderSide(width: 1, color: primaryColor),
+                            borderRadius: BorderRadius.circular(100)),
                         elevation: 20,
                         child: InkWell(
                           splashColor: context.primaryColor.withOpacity(0.8),
-                          child: SizedBox(width: 50, height: 50, child: Icon(Icons.add)),
+                          child: SizedBox(
+                              width: 50, height: 50, child: Icon(Icons.add)),
                           onTap: () {
                             mapController.animateCamera(CameraUpdate.zoomIn());
                           },
@@ -227,11 +243,14 @@ class MapScreenState extends State<MapScreen> {
                     ClipOval(
                       child: Material(
                         color: context.scaffoldBackgroundColor,
-                        shape: RoundedRectangleBorder(side: BorderSide(width: 1, color: primaryColor), borderRadius: BorderRadius.circular(100)),
+                        shape: RoundedRectangleBorder(
+                            side: BorderSide(width: 1, color: primaryColor),
+                            borderRadius: BorderRadius.circular(100)),
                         elevation: 20,
                         child: InkWell(
                           splashColor: context.primaryColor.withOpacity(0.8),
-                          child: SizedBox(width: 50, height: 50, child: Icon(Icons.remove)),
+                          child: SizedBox(
+                              width: 50, height: 50, child: Icon(Icons.remove)),
                           onTap: () {
                             mapController.animateCamera(CameraUpdate.zoomOut());
                           },
@@ -254,7 +273,9 @@ class MapScreenState extends State<MapScreen> {
                       await getUserLocationPosition().then((value) {
                         mapController.animateCamera(
                           CameraUpdate.newCameraPosition(
-                            CameraPosition(target: LatLng(value.latitude, value.longitude), zoom: 18.0),
+                            CameraPosition(
+                                target: LatLng(value.latitude, value.longitude),
+                                zoom: 18.0),
                           ),
                         );
 
@@ -275,7 +296,9 @@ class MapScreenState extends State<MapScreen> {
                       focus: destinationAddressFocusNode,
                       textStyle: primaryTextStyle(color: context.primaryColor),
                       enabled: false,
-                      decoration: inputDecoration(context, labelText: language.hintAddress).copyWith(fillColor: Colors.white),
+                      decoration: inputDecoration(context,
+                              labelText: language.hintAddress)
+                          .copyWith(fillColor: Colors.white),
                     ),
                   ],
                 ),
@@ -298,7 +321,8 @@ class MapScreenState extends State<MapScreen> {
               ],
             ).paddingAll(16),
           ),
-          Observer(builder: (context) => LoaderWidget().visible(appStore.isLoading))
+          Observer(
+              builder: (context) => LoaderWidget().visible(appStore.isLoading))
         ],
       ),
     );

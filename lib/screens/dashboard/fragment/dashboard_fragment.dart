@@ -13,6 +13,7 @@ import 'package:hands_user_app/model/dashboard_model.dart';
 import 'package:hands_user_app/model/get_my_post_job_list_response.dart';
 import 'package:hands_user_app/network/rest_apis.dart';
 import 'package:hands_user_app/screens/address/addresses_screen.dart';
+import 'package:hands_user_app/screens/auth/sign_in_screen.dart';
 import 'package:hands_user_app/screens/dashboard/Custom_BottomNav.dart';
 import 'package:hands_user_app/screens/dashboard/component/category_component.dart';
 import 'package:hands_user_app/screens/dashboard/component/featured_service_list_component.dart';
@@ -838,12 +839,22 @@ class _DashboardFragmentState extends State<DashboardFragment> {
                                         ),
                                         GestureDetector(
                                           onTap: () {
-                                            showDialog(
-                                              context: context,
-                                              builder: (BuildContext context) {
-                                                return const CustomDialogBox();
-                                              },
-                                            );
+                                            appStore.isLoggedIn
+                                                ? showDialog(
+                                                    context: context,
+                                                    builder:
+                                                        (BuildContext context) {
+                                                      return const CustomDialogBox();
+                                                    },
+                                                  )
+                                                : Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (context) => Observer(
+                                                            builder: (context) =>
+                                                                SignInScreen(
+                                                                    isFromDashboard:
+                                                                        true))));
                                           },
                                           child: Container(
                                             decoration: BoxDecoration(

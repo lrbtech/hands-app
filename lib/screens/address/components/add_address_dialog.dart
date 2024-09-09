@@ -104,6 +104,7 @@ class _AddressDialogState extends State<AddressDialog> {
       finish(context);
       finish(context);
       toast(response['message']);
+
       print(response);
     }
   }
@@ -122,24 +123,28 @@ class _AddressDialogState extends State<AddressDialog> {
                 padding: EdgeInsets.all(16),
                 width: context.width(),
                 decoration: boxDecorationDefault(
-                  color: context.primaryColor,
-                  borderRadius: radiusOnly(topRight: defaultRadius, topLeft: defaultRadius),
+                  color: white,
+                  borderRadius: radiusOnly(
+                      topRight: defaultRadius, topLeft: defaultRadius),
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(language.lblEnterYourAddress, style: boldTextStyle(color: Colors.white)),
+                    Text(language.lblEnterYourAddress,
+                        style: boldTextStyle(color: primaryColor)),
                     IconButton(
                       onPressed: () {
                         finish(context);
                       },
-                      icon: Icon(Icons.clear, color: Colors.white, size: 20),
+                      icon: Icon(Icons.clear, color: primaryColor, size: 20),
                     )
                   ],
                 ),
               ),
               Container(
-                decoration: boxDecorationWithRoundedCorners(),
+                decoration: boxDecorationWithRoundedCorners(
+                  backgroundColor: context.primaryColor,
+                ),
                 padding: EdgeInsets.all(10),
                 child: Form(
                   key: _formKey,
@@ -154,19 +159,21 @@ class _AddressDialogState extends State<AddressDialog> {
                             duration: 200.milliseconds,
                             curve: Curves.ease,
                             width: 80,
-                            padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                            padding: EdgeInsets.symmetric(
+                                vertical: 10, horizontal: 10),
                             decoration: boxDecorationWithRoundedCorners(
                                 borderRadius: radius(50),
                                 backgroundColor: context.cardColor,
                                 border: Border.all(
-                                  color: _isHome ? primaryColor : transparentColor,
+                                  color: _isHome ? white : transparentColor,
                                   width: 1,
                                 )),
                             child: Center(
-                                child: Text(
-                              language.homeAddress,
-                              style: boldTextStyle(),
-                            )),
+                              child: Text(
+                                language.homeAddress,
+                                style: boldTextStyle(),
+                              ),
+                            ),
                           ).onTap(() {
                             _isHome = true;
                             setState(() {});
@@ -176,17 +183,20 @@ class _AddressDialogState extends State<AddressDialog> {
                             duration: 200.milliseconds,
                             curve: Curves.ease,
                             width: 80,
-                            padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                            padding: EdgeInsets.symmetric(
+                                vertical: 10, horizontal: 10),
                             decoration: boxDecorationWithRoundedCorners(
                                 borderRadius: radius(50),
                                 backgroundColor: context.cardColor,
                                 border: Border.all(
-                                  color: !_isHome ? primaryColor : transparentColor,
+                                  color: !_isHome ? white : transparentColor,
                                   width: 1,
                                 )),
                             child: Center(
                                 child: Text(
-                              appStore.selectedLanguageCode == 'en' ? 'Other' : 'عنوان آخر',
+                              appStore.selectedLanguageCode == 'en'
+                                  ? 'Other'
+                                  : 'عنوان آخر',
                               style: boldTextStyle(),
                             )),
                           ).onTap(() {
@@ -214,13 +224,16 @@ class _AddressDialogState extends State<AddressDialog> {
                       ),
                       16.height,
                       AppTextField(
-                        textFieldType: TextFieldType.NAME,
+                        textFieldType: TextFieldType.NUMBER,
                         controller: floorNumberCont,
                         isValidationRequired: false,
                         decoration: inputDecoration(
                           context,
                           labelText: language.addressFlatNumber,
-                        ).copyWith(prefixIcon: Icon(CupertinoIcons.number).paddingAll(14), labelStyle: primaryTextStyle(size: 10)),
+                        ).copyWith(
+                            prefixIcon:
+                                Icon(CupertinoIcons.number).paddingAll(14),
+                            labelStyle: primaryTextStyle(size: 10)),
                       ),
                       16.height,
                       AppTextField(
@@ -245,7 +258,8 @@ class _AddressDialogState extends State<AddressDialog> {
                           context,
                           labelText: language.addressTextFieldTitle,
                         ).copyWith(
-                          prefixIcon: Icon(CupertinoIcons.number).paddingAll(14),
+                          prefixIcon:
+                              Icon(CupertinoIcons.number).paddingAll(14),
                           labelStyle: primaryTextStyle(size: 10),
                         ),
                       ),
@@ -254,8 +268,8 @@ class _AddressDialogState extends State<AddressDialog> {
                         children: [
                           AppButton(
                             text: language.save,
-                            color: primaryColor,
-                            textColor: white,
+                            color: white,
+                            textColor: primaryColor,
                             onTap: () => _saveAddress(),
                           ).expand(),
                         ],
@@ -268,7 +282,10 @@ class _AddressDialogState extends State<AddressDialog> {
             ],
           ),
         ),
-        Observer(builder: (context) => LoaderWidget().visible(appStore.isLoading).withSize(height: 80, width: 80))
+        Observer(
+            builder: (context) => LoaderWidget()
+                .visible(appStore.isLoading)
+                .withSize(height: 80, width: 80))
       ],
     );
   }
