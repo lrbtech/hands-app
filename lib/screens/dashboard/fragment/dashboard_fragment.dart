@@ -70,19 +70,19 @@ class _DashboardFragmentState extends State<DashboardFragment> {
   int? currentState = 0;
   final List list = [
     {
-      "image": "slider_m1.png",
+      "image": "slider1.png",
       "title": "NEED HELP ASAP",
       "button": "Urgent Help",
       "color": "red"
     },
     {
-      "image": "slider_m2.png",
+      "image": "slider1.png",
       "title": "NEED IT TODAY?\nWE CAN HELP!",
       "button": "Get Help Today",
       "color": "green"
     },
     {
-      "image": "slider_m3.png",
+      "image": "slider3.png",
       "title": "LET’S ARRANGE HELP LATER!",
       "button": "Schedule Help",
       "color": "black"
@@ -462,7 +462,7 @@ class _DashboardFragmentState extends State<DashboardFragment> {
                           ],
                         ),
                       ),
-                      10.height,
+                      // 10.height,
 
                       // SizedBox(
                       //   height: 140,
@@ -490,7 +490,8 @@ class _DashboardFragmentState extends State<DashboardFragment> {
                       //               // launchUrlCustomTab(temp.validate());
                       //               commonLaunchUrl(
                       //                 temp,
-                      //                 launchMode: LaunchMode.externalApplication,
+                      //                 launchMode:
+                      //                     LaunchMode.externalApplication,
                       //               );
                       //             } else {
                       //               toast(language.invalidLink);
@@ -565,222 +566,114 @@ class _DashboardFragmentState extends State<DashboardFragment> {
                       // ),
                       // 10.height,
                       Container(
-                        padding: EdgeInsets.only(left: 10, right: 10),
+                        padding: EdgeInsets.only(left: 10, right: 10, top: 0),
                         child: SizedBox(
-                          height: MediaQuery.of(context).size.height -
-                              MediaQuery.of(context).size.height * 0.3,
+                          // height: MediaQuery.of(context).size.height -
+                          //     MediaQuery.of(context).size.height * 0.3,
                           child: ListView(
                             shrinkWrap: true,
                             physics: ScrollPhysics(),
                             children: [
-                              CupertinoPageScaffold(
-                                child:
-                                    // Expanded(child: child),
-                                    Container(
-                                  height:
-                                      MediaQuery.of(context).size.height * .44,
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(
-                                      left: 25,
-                                      right: 25,
-                                      top: 0,
-                                      bottom: 60,
-                                    ),
-                                    child: AppinioSwiper(
-                                      invertAngleOnBottomDrag: true,
-                                      backgroundCardCount: 2,
-                                      swipeOptions: const SwipeOptions.all(),
-                                      controller: controller,
-                                      loop: true,
-                                      onCardPositionChanged: (
-                                        SwiperPosition position,
-                                      ) {
-                                        // int length = list.length;
-                                        // length = length - 1;
-                                        // setState(() {
-                                        //   currentState = position.index;
-                                        // });
-                                        // if (currentState == 3) {
-                                        //   setState(() {
-                                        //     currentState = 0;
-                                        //   });
-                                        // } else {
-                                        //   setState(() {
-                                        //     currentState = position.index + 1;
-                                        //   });
-                                        // }
-
-                                        // debugPrint(
-                                        //     'position.index :${position.index} - ${currentState}');
-                                        // debugPrint('position1 :${currentState}');
-                                        // debugPrint('${position.toString()}'
-                                        //     '${position.offset.toAxisDirection()}, '
-                                        //     '${position.offset}, '
-                                        //     '${position.angle}');
-                                      },
-                                      onSwipeEnd: (index, num, SwiperActivity) {
-                                        setState(() {
-                                          currentState = num;
-                                        });
-                                        debugPrint(
-                                            'onSwipeEnd :${index} - ${num}');
-                                      },
-                                      // onSwipeEnd: _swipeEnd,
-                                      // onEnd: _onEnd,
-                                      cardCount: list.length,
-                                      cardBuilder:
-                                          (BuildContext context, int index) {
-                                        return Container(
-                                          decoration: BoxDecoration(
-                                            color: primaryColor,
-                                            borderRadius:
-                                                BorderRadius.circular(30),
-                                            boxShadow: [
-                                              BoxShadow(
-                                                  color: Colors.white54,
-                                                  spreadRadius: 0.1,
-                                                  blurRadius: 3)
-                                            ],
-                                            image: DecorationImage(
+                              CarouselSlider(
+                                items: list.validate().map((slider) {
+                                  int loc_index = list.indexOf(slider);
+                                  return GestureDetector(
+                                    onTap: () async {},
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(6.0),
+                                      child: Container(
+                                        // padding: EdgeInsets.all(10),
+                                        // width: 300,
+                                        // height: MediaQuery.of(context)
+                                        //         .size
+                                        //         .height -
+                                        //     MediaQuery.of(context).size.height *
+                                        //         0.3,
+                                        decoration: BoxDecoration(
+                                          color: primaryColor,
+                                          borderRadius:
+                                              BorderRadius.circular(20),
+                                          boxShadow: [
+                                            BoxShadow(
+                                                color: Colors.white54,
+                                                spreadRadius: 0.1,
+                                                blurRadius: 3)
+                                          ],
+                                          image: DecorationImage(
                                               image: AssetImage(
-                                                  'assets/images/${currentState == index ? list[index]["image"] : 'empty.png'}'),
-                                              fit: BoxFit.cover,
-                                            ),
-                                          ),
-                                          child: Container(
-                                            width: MediaQuery.of(context)
-                                                .size
-                                                .width,
-                                            child: Stack(
+                                                  'assets/images/${slider["image"]}'),
+                                              fit: BoxFit.fill,
                                               alignment:
-                                                  AlignmentDirectional.center,
-                                              // mainAxisAlignment:
-                                              //     MainAxisAlignment.spaceAround,
-                                              // crossAxisAlignment:
-                                              //     CrossAxisAlignment.center,
-                                              children: [
-                                                Align(
-                                                  alignment:
-                                                      Alignment.topCenter,
-                                                  child: Padding(
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                            20.0),
-                                                    child: Text(
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                      "${list[index]["title"]}",
-                                                      style: boldTextStyle(
-                                                          color: appStore
-                                                                  .isDarkMode
-                                                              ? white
-                                                              : context
-                                                                  .primaryColor,
-                                                          size: 22,
-                                                          weight:
-                                                              FontWeight.bold),
-                                                    ),
-                                                  ),
-                                                ),
-                                                GestureDetector(
-                                                  onTap: () {
-                                                    if (index == 0) {
-                                                      doIfLoggedIn(context, () {
-                                                        KeyboardVisibilityProvider(
-                                                          child:
-                                                              CreatePostRequestScreen(
-                                                            jobDateType:
-                                                                JobDateType
-                                                                    .Today,
-                                                            isUrgent: true,
-                                                          ),
-                                                        ).launch(context);
-                                                      });
-                                                    } else if (index == 1) {
-                                                      doIfLoggedIn(context, () {
-                                                        KeyboardVisibilityProvider(
-                                                          child:
-                                                              CreatePostRequestScreen(
-                                                            jobDateType:
-                                                                JobDateType
-                                                                    .Today,
-                                                          ),
-                                                        ).launch(context);
-                                                      });
-                                                    } else {
-                                                      doIfLoggedIn(context, () {
-                                                        KeyboardVisibilityProvider(
-                                                          child: CreatePostRequestScreen(
-                                                              jobDateType:
-                                                                  JobDateType
-                                                                      .Scheduled),
-                                                        ).launch(context);
-                                                      });
-                                                    }
-                                                  },
-                                                  child: Container(
-                                                    decoration: BoxDecoration(
-                                                      color: Colors.white,
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              15),
-                                                    ),
-                                                    child: Padding(
-                                                      padding:
-                                                          const EdgeInsets.only(
-                                                              top: 10,
-                                                              bottom: 10,
-                                                              left: 30,
-                                                              right: 30),
-                                                      child: Text(
-                                                          "${list[index]["button"]}",
-                                                          style: boldTextStyle(
-                                                              color:
-                                                                  Colors.black,
-                                                              size: 14,
-                                                              weight: FontWeight
-                                                                  .bold)),
-                                                    ),
-                                                  ),
-                                                ),
-                                                currentState != index
-                                                    ? Positioned(
-                                                        bottom: 0,
-                                                        child: Container(
-                                                          decoration:
-                                                              BoxDecoration(
-                                                            color: list[index][
-                                                                        "color"] ==
-                                                                    "red"
-                                                                ? Colors.red
-                                                                : list[index][
-                                                                            "color"] ==
-                                                                        "green"
-                                                                    ? Colors
-                                                                        .green
-                                                                    : Colors
-                                                                        .black,
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .only(
-                                                              topLeft: Radius
-                                                                  .circular(30),
-                                                              topRight: Radius
-                                                                  .circular(30),
-                                                            ),
-                                                          ),
-                                                          child: Padding(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .only(
-                                                                    top: 5,
-                                                                    bottom: 5,
-                                                                    left: 30,
-                                                                    right: 30),
+                                                  Alignment.bottomCenter),
+                                        ),
+                                        child: Padding(
+                                          padding:
+                                              EdgeInsetsDirectional.fromSTEB(
+                                                  0.0, 30.0, 0.0, 30.0),
+                                          child: Stack(
+                                            children: [
+                                              currentState == loc_index
+                                                  ? SizedBox()
+                                                  : Align(
+                                                      alignment: currentState! >
+                                                              loc_index
+                                                          ? Alignment
+                                                              .centerRight
+                                                          : Alignment
+                                                              .centerLeft,
+                                                      child: Container(
+                                                        width: 30,
+                                                        height: 100,
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          color: slider[
+                                                                      "color"] ==
+                                                                  "red"
+                                                              ? Colors.red
+                                                              : slider["color"] ==
+                                                                      "green"
+                                                                  ? Colors.green
+                                                                  : Colors
+                                                                      .black,
+                                                          borderRadius:
+                                                              currentState! >
+                                                                      loc_index
+                                                                  ? BorderRadius
+                                                                      .only(
+                                                                      bottomLeft:
+                                                                          Radius.circular(
+                                                                              30),
+                                                                      topLeft: Radius
+                                                                          .circular(
+                                                                              30),
+                                                                    )
+                                                                  : BorderRadius
+                                                                      .only(
+                                                                      bottomRight:
+                                                                          Radius.circular(
+                                                                              30),
+                                                                      topRight:
+                                                                          Radius.circular(
+                                                                              30),
+                                                                    ),
+                                                        ),
+                                                        child: Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .only(
+                                                                  top: 0,
+                                                                  bottom: 0,
+                                                                  left: 0,
+                                                                  right: 10),
+                                                          child: RotatedBox(
+                                                            quarterTurns: 1,
                                                             child: Text(
-                                                                "${list[index]["button"]}",
+                                                                "${slider["button"]}",
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .center,
                                                                 style: boldTextStyle(
-                                                                    color: list[index]["color"] ==
+                                                                    color: slider["color"] ==
                                                                             "black"
                                                                         ? Colors
                                                                             .white
@@ -791,17 +684,373 @@ class _DashboardFragmentState extends State<DashboardFragment> {
                                                                         .bold)),
                                                           ),
                                                         ),
-                                                      )
-                                                    : SizedBox()
-                                              ],
-                                            ),
+                                                      ),
+                                                    ),
+                                              Column(
+                                                // mainAxisSize: MainAxisSize.max,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.center,
+                                                children: [
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            10.0),
+                                                    child: Text(
+                                                      "${slider['title']}",
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      style: TextStyle(
+                                                        fontFamily: 'Satoshi',
+                                                        color: white,
+                                                        fontSize: 24.0,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Padding(
+                                                    padding:
+                                                        EdgeInsetsDirectional
+                                                            .fromSTEB(0.0, 16.0,
+                                                                0.0, 0.0),
+                                                    child: GestureDetector(
+                                                      onTap: () {
+                                                        if (loc_index == 0) {
+                                                          doIfLoggedIn(context,
+                                                              () {
+                                                            KeyboardVisibilityProvider(
+                                                              child:
+                                                                  CreatePostRequestScreen(
+                                                                jobDateType:
+                                                                    JobDateType
+                                                                        .Today,
+                                                                isUrgent: true,
+                                                              ),
+                                                            ).launch(context);
+                                                          });
+                                                        } else if (loc_index ==
+                                                            1) {
+                                                          doIfLoggedIn(context,
+                                                              () {
+                                                            KeyboardVisibilityProvider(
+                                                              child:
+                                                                  CreatePostRequestScreen(
+                                                                jobDateType:
+                                                                    JobDateType
+                                                                        .Today,
+                                                              ),
+                                                            ).launch(context);
+                                                          });
+                                                        } else {
+                                                          doIfLoggedIn(context,
+                                                              () {
+                                                            KeyboardVisibilityProvider(
+                                                              child: CreatePostRequestScreen(
+                                                                  jobDateType:
+                                                                      JobDateType
+                                                                          .Scheduled),
+                                                            ).launch(context);
+                                                          });
+                                                        }
+                                                      },
+                                                      child: Container(
+                                                        width: 110.0,
+                                                        height: 35.0,
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          color: white,
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                                      6.0),
+                                                        ),
+                                                        alignment:
+                                                            AlignmentDirectional(
+                                                                0.0, 0.0),
+                                                        child: Text(
+                                                          "${slider['button']}",
+                                                          style: TextStyle(
+                                                            fontFamily:
+                                                                'Urbanist',
+                                                            color: Colors.black,
+                                                            fontSize: 12.0,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
                                           ),
-                                        );
-                                      },
+                                        ),
+                                      ),
                                     ),
-                                  ),
+                                  );
+                                }).toList(),
+                                options: CarouselOptions(
+                                  aspectRatio: 1.2,
+                                  initialPage: 1,
+                                  viewportFraction: 0.7,
+                                  disableCenter: true,
+                                  enlargeCenterPage: true,
+                                  enlargeFactor: 0.35,
+                                  enableInfiniteScroll: false,
+                                  scrollDirection: Axis.horizontal,
+                                  autoPlay: false,
+                                  autoPlayAnimationDuration:
+                                      Duration(milliseconds: 800),
+                                  autoPlayInterval:
+                                      Duration(milliseconds: (800 + 4000)),
+                                  autoPlayCurve: Curves.linear,
+                                  pauseAutoPlayInFiniteScroll: true,
+                                  onPageChanged: (index, _) async {
+                                    // print("index ${index}");
+                                    setState(() {
+                                      currentState = index;
+                                    });
+                                    // _model.carouselCurrentIndex = index;
+                                    // setState(() {
+                                    //   FFAppState().introIndex =
+                                    //       _model.carouselCurrentIndex;
+                                    // });
+                                  },
                                 ),
                               ),
+                              // CupertinoPageScaffold(
+                              //   child:
+                              //       // Expanded(child: child),
+                              //       Container(
+                              //     height:
+                              //         MediaQuery.of(context).size.height * .44,
+                              //     child: Padding(
+                              //       padding: const EdgeInsets.only(
+                              //         left: 25,
+                              //         right: 25,
+                              //         top: 0,
+                              //         bottom: 60,
+                              //       ),
+                              //       child: AppinioSwiper(
+                              //         invertAngleOnBottomDrag: true,
+                              //         backgroundCardCount: 2,
+                              //         swipeOptions: const SwipeOptions.all(),
+                              //         controller: controller,
+                              //         loop: true,
+                              //         onCardPositionChanged: (
+                              //           SwiperPosition position,
+                              //         ) {
+                              //           // int length = list.length;
+                              //           // length = length - 1;
+                              //           // setState(() {
+                              //           //   currentState = position.index;
+                              //           // });
+                              //           // if (currentState == 3) {
+                              //           //   setState(() {
+                              //           //     currentState = 0;
+                              //           //   });
+                              //           // } else {
+                              //           //   setState(() {
+                              //           //     currentState = position.index + 1;
+                              //           //   });
+                              //           // }
+
+                              //           // debugPrint(
+                              //           //     'position.index :${position.index} - ${currentState}');
+                              //           // debugPrint('position1 :${currentState}');
+                              //           // debugPrint('${position.toString()}'
+                              //           //     '${position.offset.toAxisDirection()}, '
+                              //           //     '${position.offset}, '
+                              //           //     '${position.angle}');
+                              //         },
+                              //         onSwipeEnd: (index, num, SwiperActivity) {
+                              //           setState(() {
+                              //             currentState = num;
+                              //           });
+                              //           debugPrint(
+                              //               'onSwipeEnd :${index} - ${num}');
+                              //         },
+                              //         // onSwipeEnd: _swipeEnd,
+                              //         // onEnd: _onEnd,
+                              //         cardCount: list.length,
+                              //         cardBuilder:
+                              //             (BuildContext context, int index) {
+                              //           return Container(
+                              //             decoration: BoxDecoration(
+                              //               color: primaryColor,
+                              //               borderRadius:
+                              //                   BorderRadius.circular(30),
+                              //               boxShadow: [
+                              //                 BoxShadow(
+                              //                     color: Colors.white54,
+                              //                     spreadRadius: 0.1,
+                              //                     blurRadius: 3)
+                              //               ],
+                              //               image: DecorationImage(
+                              //                 image: AssetImage(
+                              //                     'assets/images/${currentState == index ? list[index]["image"] : 'empty.png'}'),
+                              //                 fit: BoxFit.cover,
+                              //               ),
+                              //             ),
+                              //             child: Container(
+                              //               width: MediaQuery.of(context)
+                              //                   .size
+                              //                   .width,
+                              //               child: Stack(
+                              //                 alignment:
+                              //                     AlignmentDirectional.center,
+                              //                 // mainAxisAlignment:
+                              //                 //     MainAxisAlignment.spaceAround,
+                              //                 // crossAxisAlignment:
+                              //                 //     CrossAxisAlignment.center,
+                              //                 children: [
+                              //                   Align(
+                              //                     alignment:
+                              //                         Alignment.topCenter,
+                              //                     child: Padding(
+                              //                       padding:
+                              //                           const EdgeInsets.all(
+                              //                               20.0),
+                              //                       child: Text(
+                              //                         textAlign:
+                              //                             TextAlign.center,
+                              //                         "${list[index]["title"]}",
+                              //                         style: boldTextStyle(
+                              //                             color: appStore
+                              //                                     .isDarkMode
+                              //                                 ? white
+                              //                                 : context
+                              //                                     .primaryColor,
+                              //                             size: 22,
+                              //                             weight:
+                              //                                 FontWeight.bold),
+                              //                       ),
+                              //                     ),
+                              //                   ),
+                              //                   GestureDetector(
+                              //                     onTap: () {
+                              //                       if (index == 0) {
+                              //                         doIfLoggedIn(context, () {
+                              //                           KeyboardVisibilityProvider(
+                              //                             child:
+                              //                                 CreatePostRequestScreen(
+                              //                               jobDateType:
+                              //                                   JobDateType
+                              //                                       .Today,
+                              //                               isUrgent: true,
+                              //                             ),
+                              //                           ).launch(context);
+                              //                         });
+                              //                       } else if (index == 1) {
+                              //                         doIfLoggedIn(context, () {
+                              //                           KeyboardVisibilityProvider(
+                              //                             child:
+                              //                                 CreatePostRequestScreen(
+                              //                               jobDateType:
+                              //                                   JobDateType
+                              //                                       .Today,
+                              //                             ),
+                              //                           ).launch(context);
+                              //                         });
+                              //                       } else {
+                              //                         doIfLoggedIn(context, () {
+                              //                           KeyboardVisibilityProvider(
+                              //                             child: CreatePostRequestScreen(
+                              //                                 jobDateType:
+                              //                                     JobDateType
+                              //                                         .Scheduled),
+                              //                           ).launch(context);
+                              //                         });
+                              //                       }
+                              //                     },
+                              //                     child: Container(
+                              //                       decoration: BoxDecoration(
+                              //                         color: Colors.white,
+                              //                         borderRadius:
+                              //                             BorderRadius.circular(
+                              //                                 15),
+                              //                       ),
+                              //                       child: Padding(
+                              //                         padding:
+                              //                             const EdgeInsets.only(
+                              //                                 top: 10,
+                              //                                 bottom: 10,
+                              //                                 left: 30,
+                              //                                 right: 30),
+                              //                         child: Text(
+                              //                             "${list[index]["button"]}",
+                              //                             style: boldTextStyle(
+                              //                                 color:
+                              //                                     Colors.black,
+                              //                                 size: 14,
+                              //                                 weight: FontWeight
+                              //                                     .bold)),
+                              //                       ),
+                              //                     ),
+                              //                   ),
+                              //                   currentState != index
+                              //                       ? Positioned(
+                              //                           bottom: 0,
+                              //                           child: Container(
+                              //                             decoration:
+                              //                                 BoxDecoration(
+                              //                               color: list[index][
+                              //                                           "color"] ==
+                              //                                       "red"
+                              //                                   ? Colors.red
+                              //                                   : list[index][
+                              //                                               "color"] ==
+                              //                                           "green"
+                              //                                       ? Colors
+                              //                                           .green
+                              //                                       : Colors
+                              //                                           .black,
+                              //                               borderRadius:
+                              //                                   BorderRadius
+                              //                                       .only(
+                              //                                 topLeft: Radius
+                              //                                     .circular(30),
+                              //                                 topRight: Radius
+                              //                                     .circular(30),
+                              //                               ),
+                              //                             ),
+                              //                             child: Padding(
+                              //                               padding:
+                              //                                   const EdgeInsets
+                              //                                       .only(
+                              //                                       top: 5,
+                              //                                       bottom: 5,
+                              //                                       left: 30,
+                              //                                       right: 30),
+                              //                               child: Text(
+                              //                                   "${list[index]["button"]}",
+                              //                                   style: boldTextStyle(
+                              //                                       color: list[index]["color"] ==
+                              //                                               "black"
+                              //                                           ? Colors
+                              //                                               .white
+                              //                                           : Colors
+                              //                                               .black,
+                              //                                       size: 10,
+                              //                                       weight: FontWeight
+                              //                                           .bold)),
+                              //                             ),
+                              //                           ),
+                              //                         )
+                              //                       : SizedBox()
+                              //                 ],
+                              //               ),
+                              //             ),
+                              //           );
+                              //         },
+                              //       ),
+                              //     ),
+                              //   ),
+                              // ),
                               10.height,
                               Padding(
                                 padding: const EdgeInsets.only(

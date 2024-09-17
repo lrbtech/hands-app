@@ -7,7 +7,9 @@ var defaultPrimaryColor = Color(0xFF000C2C);
 
 // Don't add slash at the end of the url
 const DOMAIN_URL =
-    'https://handsappuae.com/secure-admin-panel'; // Don't add slash at the end of the url
+    'http://hands.lrbinfotech.com'; // Don't add slash at the end of the url
+// const DOMAIN_URL =
+//     'https://handsappuae.com/secure-admin-panel'; // Don't add slash at the end of the url
 const BASE_URL = '$DOMAIN_URL/api/';
 
 const DEFAULT_LANGUAGE = 'en';
