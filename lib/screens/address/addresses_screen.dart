@@ -306,7 +306,7 @@ class _AddressesScreenState extends State<AddressesScreen> {
                 onPressed: () => MapScreen().launch(context),
                 child: Icon(
                   Iconsax.location_add,
-                  color: white,
+                  color: secondaryColor,
                   size: 30,
                 ),
               ),
@@ -315,10 +315,11 @@ class _AddressesScreenState extends State<AddressesScreen> {
               Row(
                 children: [
                   FloatingActionButton(
+                      backgroundColor: secondaryColor,
                       onPressed: appStore.tempAddress == null ? null : () => finish(context),
                       child: Text(
                         language.setAddress,
-                        style: boldTextStyle(color: white),
+                        style: boldTextStyle(color: primaryColor), 
                       )).expand(),
                 ],
               ),

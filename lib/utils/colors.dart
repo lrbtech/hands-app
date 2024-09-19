@@ -2,7 +2,8 @@ import 'package:hands_user_app/main.dart';
 import 'package:hands_user_app/utils/configs.dart';
 import 'package:flutter/material.dart';
 
-var primaryColor = appStore.isDarkMode ? darkPrimaryColor : defaultPrimaryColor;
+var primaryColor = appStore.isDarkMode ? darkPrimaryColor : lightPrimaryColor;
+var secondaryColor = appStore.isDarkMode ? lightPrimaryColor : darkPrimaryColor;
 const darkPrimaryColor = Color(0xFF000C2C);
 const secondaryPrimaryColor = Color.fromARGB(255, 255, 255, 255);
 const lightPrimaryColor = Color.fromARGB(255, 255, 255, 255);
