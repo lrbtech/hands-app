@@ -8,7 +8,7 @@ Widget custombookingContainer(BuildContext context) {
   return Container(
     color: primaryColor,
     child: Padding(
-      padding: const EdgeInsets.only(top: 10, left: 10, right: 10),
+      padding: const EdgeInsets.only(top: 20, left: 10, right: 10),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [

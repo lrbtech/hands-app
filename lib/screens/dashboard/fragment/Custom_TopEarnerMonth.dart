@@ -35,7 +35,7 @@ Widget customTopearnerMonth(BuildContext context) {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Top Earner of Week!",
+                  "Top Earner of Month!",
                   style: GoogleFonts.almarai(
                     fontSize: 18,
                     fontWeight: FontWeight.w700,

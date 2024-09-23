@@ -6,7 +6,7 @@ import 'package:hands_user_app/utils/colors.dart';
 
 Widget customTopearnerWeek(BuildContext context) {
   return Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+    padding: const EdgeInsets.only(top: 30,bottom: 20,right: 10, left: 10),//EdgeInsets.symmetric(horizontal: 10, vertical: 10),
     child: Container(
       height: 175,
       width: 371,

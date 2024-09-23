@@ -216,7 +216,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         item: ItemConfig(
           icon: Icon(Iconsax.home),
           title: language.home,
-          activeForegroundColor: Colors.white,
+          activeForegroundColor: secondaryColor,
           inactiveForegroundColor: grey,
         ),
       ),
@@ -244,7 +244,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           item: ItemConfig(
             icon: Icon(Iconsax.user),
             title: language.profile,
-            activeForegroundColor: Colors.white,
+            activeForegroundColor: secondaryColor,
             inactiveForegroundColor: grey,
           )),
       // PersistentBottomNavBarItem(

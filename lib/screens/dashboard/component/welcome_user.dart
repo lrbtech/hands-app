@@ -26,10 +26,10 @@ class WelcomeUser extends StatelessWidget {
             ),
             child: CachedImageWidget(
               url: appStore.userProfileImage,
-              height: 44,
-              width: 44,
+              height: 45,
+              width: 45,
               fit: BoxFit.cover,
-              radius: 44 / 2,
+              radius: 45 / 2,
             ),
           ),
           10.width,
@@ -67,8 +67,8 @@ class WelcomeUser extends StatelessWidget {
                       blurRadius: 1),
                 ],
               ),
-              height: 45,
-              width: 45,
+              height: 38,
+              width: 38,
               padding: EdgeInsets.all(4),
               child: Align(
                 alignment: Alignment.center,
@@ -104,7 +104,7 @@ class WelcomeUser extends StatelessWidget {
             ).onTap(() {
               NotificationScreen().launch(context);
             }, borderRadius: BorderRadius.circular(50)),
-          10.width
+          0.width
         ],
       ),
     );

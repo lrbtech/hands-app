@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 var primaryColor = appStore.isDarkMode ? darkPrimaryColor : lightPrimaryColor;
 var secondaryColor = appStore.isDarkMode ? lightPrimaryColor : darkPrimaryColor;
 const darkPrimaryColor = Color(0xFF000C2C);
-const secondaryPrimaryColor = Color.fromARGB(255, 255, 255, 255);
-const lightPrimaryColor = Color.fromARGB(255, 255, 255, 255);
+const secondaryPrimaryColor = Color(0xFFFAF9F6);
+const lightPrimaryColor = Color(0xFFFAF9F6);
 //Text Color
 const appTextPrimaryColor = Color(0xff1C1F34);
 const appTextSecondaryColor = Color(0xff6C757D);
