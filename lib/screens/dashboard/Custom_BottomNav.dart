@@ -12,8 +12,8 @@ Widget customFloatingActionButton(BuildContext context) {
   return Align(
     alignment: Alignment(0.1, 1.2),
     child: Container(
-      height: 73,
-      width: 73,
+      height: 55,
+      width: 55,
       decoration: const BoxDecoration(
         borderRadius: BorderRadius.all(Radius.circular(50)),
         boxShadow: [

@@ -6,6 +6,7 @@ Widget genderSelection({
   required BuildContext context,
   required String? selectedGender,
   required ValueChanged<String?> onChanged,
+  bool? error,
   Color? activeColor,
   Color? inactiveColor = AppColors.greylight,
   Color? textColor,
@@ -17,66 +18,80 @@ Widget genderSelection({
   activeColor = activeColor ?? Theme.of(context).colorScheme.onBackground;
   textColor = textColor ?? Theme.of(context).colorScheme.onSecondary;
 
-  return Row(
-    mainAxisAlignment: MainAxisAlignment.start,
-    children: <Widget>[
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
       Row(
+        mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
-          Radio<String>(
-            value: 'Male',
-            groupValue: selectedGender,
-            onChanged: onChanged,
-            activeColor: activeColor,
-            fillColor: MaterialStateProperty.resolveWith<Color?>(
-              (Set<MaterialState> states) {
-                if (!states.contains(MaterialState.selected)) {
-                  return inactiveColor;
-                }
-                return null;
-              },
-            ),
+          Row(
+            children: <Widget>[
+              Radio<String>(
+                value: 'male',
+                groupValue: selectedGender,
+                onChanged: onChanged,
+                activeColor: activeColor,
+                fillColor: MaterialStateProperty.resolveWith<Color?>(
+                  (Set<MaterialState> states) {
+                    if (!states.contains(MaterialState.selected)) {
+                      return inactiveColor;
+                    }
+                    return null;
+                  },
+                ),
+              ),
+              SizedBox(width: spacing),
+              Text(
+                'Male',
+                style: GoogleFonts.getFont(
+                  fontFamily,
+                  color: textColor,
+                  fontSize: fontSize,
+                  fontWeight: fontWeight,
+                ),
+              ),
+            ],
           ),
-          SizedBox(width: spacing),
-          Text(
-            'Male',
-            style: GoogleFonts.getFont(
-              fontFamily,
-              color: textColor,
-              fontSize: fontSize,
-              fontWeight: fontWeight,
-            ),
+          SizedBox(width: 10.0),
+          Row(
+            children: <Widget>[
+              Radio<String>(
+                value: 'female',
+                groupValue: selectedGender,
+                onChanged: onChanged,
+                activeColor: activeColor,
+                fillColor: MaterialStateProperty.resolveWith<Color?>(
+                  (Set<MaterialState> states) {
+                    if (!states.contains(MaterialState.selected)) {
+                      return inactiveColor;
+                    }
+                    return null;
+                  },
+                ),
+              ),
+              SizedBox(width: spacing),
+              Text(
+                'Female',
+                style: GoogleFonts.getFont(
+                  fontFamily,
+                  color: textColor,
+                  fontSize: fontSize,
+                  fontWeight: fontWeight,
+                ),
+              ),
+            ],
           ),
         ],
       ),
-      SizedBox(width: 10.0),
-      Row(
-        children: <Widget>[
-          Radio<String>(
-            value: 'Female',
-            groupValue: selectedGender,
-            onChanged: onChanged,
-            activeColor: activeColor,
-            fillColor: MaterialStateProperty.resolveWith<Color?>(
-              (Set<MaterialState> states) {
-                if (!states.contains(MaterialState.selected)) {
-                  return inactiveColor;
-                }
-                return null;
-              },
-            ),
-          ),
-          SizedBox(width: spacing),
-          Text(
-            'Female',
-            style: GoogleFonts.getFont(
-              fontFamily,
-              color: textColor,
-              fontSize: fontSize,
-              fontWeight: fontWeight,
-            ),
-          ),
-        ],
-      ),
+      error == true
+          ? Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                "Please select gender!",
+                style: TextStyle(color: Colors.red),
+              ),
+            )
+          : SizedBox()
     ],
   );
 }

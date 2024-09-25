@@ -64,9 +64,9 @@ Future<LoginResponse> loginUser(Map request,
       await buildHttpResponse(isSocialLogin ? 'social-login' : 'login',
           request: request, method: HttpMethodType.POST)));
 
-  if (res.userData != null && res.userData!.userType != USER_TYPE_USER) {
-    throw language.lblNotValidUser;
-  }
+  // if (res.userData != null && res.userData!.userType != USER_TYPE_USER) {
+  //   throw language.lblNotValidUser;
+  // }
 
   if (!isSocialLogin) await appStore.setLoginType(LOGIN_TYPE_USER);
 
@@ -89,6 +89,7 @@ Future<void> saveUserData(UserData data) async {
   await appStore.setLastName(data.lastName.validate());
   await appStore.setUserEmail(data.email.validate());
   await appStore.setUserName(data.username.validate());
+  await appStore.setUserType(data.userType.validate());
   await appStore.setCountryId(data.countryId.validate());
   await appStore.setStateId(data.stateId.validate());
   await appStore.setCityId(data.cityId.validate());

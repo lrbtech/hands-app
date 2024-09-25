@@ -1,18 +1,23 @@
+import 'package:animated_custom_dropdown/custom_dropdown.dart';
 import 'package:flutter/material.dart';
+import 'package:hands_user_app/main.dart';
+import 'package:hands_user_app/model/category_model.dart';
+import 'package:hands_user_app/network/rest_apis.dart';
 import 'package:hands_user_app/screens/provider/Utils/Custom_Dailog_Botton.dart';
 import 'package:hands_user_app/screens/provider/Utils/Gender_Radio.dart';
 import 'package:hands_user_app/screens/provider/Widgets/Custom_Textfield.dart';
 import 'package:hands_user_app/screens/provider/Widgets/Image_Urls.dart';
 import 'package:hands_user_app/screens/provider/Widgets/Title_Text.dart';
+import 'package:hands_user_app/utils/constant.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 import 'Widgets/countery.dart';
 
 class Step1 extends StatefulWidget {
-  const Step1({
-    super.key,
-    required void Function() onNext,
-  });
+  Function(Map) onNext;
+  Step1(
+    this.onNext,
+  );
 
   @override
   State<Step1> createState() => _Step1State();
@@ -20,6 +25,7 @@ class Step1 extends StatefulWidget {
 
 class _Step1State extends State<Step1> {
   final TextEditingController _dobController = TextEditingController();
+  final TextEditingController _passportController = TextEditingController();
   String? _selectedGender;
   List professional = [
     "Painter",
@@ -43,6 +49,88 @@ class _Step1State extends State<Step1> {
   void dispose() {
     _dobController.dispose();
     super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    init();
+  }
+
+  bool error_professional = false;
+  bool error_national = false;
+  bool error_passportNo = false;
+  bool error_dob = false;
+  bool error_gender = false;
+  validateStep1() {
+    setState(() {
+      error_professional = false;
+      error_national = false;
+      error_passportNo = false;
+      error_dob = false;
+      error_gender = false;
+    });
+    if (_controller.text == "") {
+      setState(() {
+        error_professional = true;
+      });
+    } else if (select_country == null) {
+      setState(() {
+        error_national = true;
+      });
+    } else if (_passportController.text == '') {
+      setState(() {
+        error_passportNo = true;
+      });
+    } else if (_dobController.text == '') {
+      setState(() {
+        error_dob = true;
+      });
+    } else if (_selectedGender == null) {
+      setState(() {
+        error_gender = true;
+      });
+    } else {
+      widget.onNext(<String, dynamic>{
+        'user_id': appStore.userId,
+        'residential_status': 1,
+        'category_name': _controller.text,
+        'nationality': select_country,
+        'passport_number': _passportController.text,
+        'gender': _selectedGender,
+        'date_of_birth': _dobController.text,
+      });
+    }
+  }
+
+  List<CategoryData>? categoryList;
+  List<String>? future;
+  TextEditingController _controller = TextEditingController();
+  Future<List<String>> getProvidersCategoryList() async {
+    categoryList = [];
+    await getCategoryList(CATEGORY_LIST_ALL).then((value) {
+      if (value.categoryList!.isNotEmpty) {
+        categoryList!.addAll(value.categoryList.validate());
+      }
+
+      setState(() {});
+    });
+
+    List<String> x = [];
+
+    categoryList?.forEach((element) {
+      String? name =
+          appStore.selectedLanguageCode == 'en' ? element.name : element.nameAr;
+      x.add(name ?? '');
+    });
+
+    return x;
+  }
+
+  Future<void> init() async {
+    // appStore.setLoading(true);
+
+    future = await getProvidersCategoryList();
   }
 
   Future<void> _selectDate(BuildContext context) async {
@@ -73,132 +161,119 @@ class _Step1State extends State<Step1> {
             heading(context: context, text: "Choose Professional"),
             Padding(
               padding: const EdgeInsets.only(top: 0, left: 15, right: 15),
-              child: Stack(
-                children: <Widget>[
-                  Container(
-                    height: 62.0,
-                    padding: EdgeInsets.only(left: 50.0, right: 16.0),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      border: Border.all(
-                          color:
-                              error_pro ? Colors.pinkAccent : Color(0xff323345),
-                          width: 1.0),
-                      borderRadius: BorderRadius.all(Radius.circular(20.0)),
-                    ),
-                    child: DropdownButtonHideUnderline(
-                      child: DropdownButton(
-                        hint: Padding(
-                          padding: const EdgeInsets.only(right: 20.0),
-                          child: Text("Select Professional",
-                              style: TextStyle(color: Colors.grey)),
-                        ),
-                        dropdownColor: Colors.white,
-                        elevation: 2,
-                        //icon: Icon(Icons.arrow_drop_down),
-                        iconSize: 36.0,
-                        isExpanded: true,
-                        value: select_pro,
-                        onChanged: (value) {
-                          setState(() {
-                            select_pro = value;
-                          });
-                        },
-                        items: professional.map<DropdownMenuItem>((value) {
-                          return DropdownMenuItem(
-                            value: value,
-                            child: Padding(
-                              padding: const EdgeInsets.only(right: 20.0),
-                              child: Text("${value}",
-                                  style: TextStyle(color: Colors.black)),
-                            ),
-                          );
-                        }).toList(),
+              child: CustomDropdown.search(
+                hintText: "Select Professional",
+                searchHintText: language.lblSearchFor,
+                items: future ?? [],
+                excludeSelected: false,
+                noResultFoundText: language.noCategoryFound,
+                noResultFoundBuilder: (context, text) => Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: Center(
+                    child: Text(
+                      text,
+                      style: primaryTextStyle(
+                        color:
+                            appStore.isDarkMode ? white : context.primaryColor,
                       ),
                     ),
                   ),
-                  Container(
-                    margin: EdgeInsets.only(top: 15.0, left: 10.0),
-                    child: Icon(
-                      Icons.person,
-                      color: Colors.black,
-                      size: 30.0,
-                    ),
+                ),
+                decoration: CustomDropdownDecoration(
+                  closedSuffixIcon: Icon(
+                    Icons.keyboard_arrow_down_outlined,
+                    color: const Color.fromARGB(255, 98, 97, 97),
                   ),
-                ],
+                  closedFillColor: white,
+                  closedBorder: Border.all(
+                      color:
+                          error_professional ? Colors.red : Colors.transparent),
+                  expandedFillColor: context.scaffoldBackgroundColor,
+                  listItemStyle: primaryTextStyle(
+                    color: appStore.isDarkMode ? white : context.primaryColor,
+                  ),
+                  listItemDecoration: ListItemDecoration(
+                    selectedColor: greenColor,
+                  ),
+                  headerStyle: primaryTextStyle(
+                    color: appStore.isDarkMode
+                        ? Colors.black
+                        : context.primaryColor,
+                  ),
+                ),
+                onChanged: (value) {
+                  log('changing value to: $value');
+                  _controller.text = value.toString();
+                  setState(() {});
+                },
               ),
             ),
             10.height,
             heading(context: context, text: "Choose Nationality"),
             Padding(
               padding: const EdgeInsets.only(top: 0, left: 15, right: 15),
-              child: Stack(
-                children: <Widget>[
-                  Container(
-                    height: 62.0,
-                    padding: EdgeInsets.only(left: 50.0, right: 16.0),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      border: Border.all(
-                          color: error_country
-                              ? Colors.pinkAccent
-                              : Color(0xff323345),
-                          width: 1.0),
-                      borderRadius: BorderRadius.all(Radius.circular(20.0)),
-                    ),
-                    child: DropdownButtonHideUnderline(
-                      child: DropdownButton(
-                        hint: Padding(
-                          padding: const EdgeInsets.only(right: 20.0),
-                          child: Text("Select Nationality",
-                              style: TextStyle(color: Colors.grey)),
-                        ),
-                        dropdownColor: Colors.white,
-                        elevation: 2,
-                        //icon: Icon(Icons.arrow_drop_down),
-                        iconSize: 36.0,
-                        isExpanded: true,
-                        value: select_country,
-                        onChanged: (value) {
-                          setState(() {
-                            select_country = value;
-                          });
-                        },
-                        items: country.map<DropdownMenuItem>((value) {
-                          return DropdownMenuItem(
-                            value: value,
-                            child: Padding(
-                              padding: const EdgeInsets.only(right: 20.0),
-                              child: Text("${value}",
-                                  style: TextStyle(color: Colors.black)),
-                            ),
-                          );
-                        }).toList(),
+              child: CustomDropdown.search(
+                hintText: "Select Nationality",
+                searchHintText: language.lblSearchFor,
+                items: country,
+                excludeSelected: false,
+                noResultFoundText: language.noCategoryFound,
+                noResultFoundBuilder: (context, text) => Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: Center(
+                    child: Text(
+                      text,
+                      style: primaryTextStyle(
+                        color:
+                            appStore.isDarkMode ? white : context.primaryColor,
                       ),
                     ),
                   ),
-                  Container(
-                    margin: EdgeInsets.only(top: 15.0, left: 10.0),
-                    child: Icon(
-                      Icons.person,
-                      color: Colors.black,
-                      size: 30.0,
-                    ),
+                ),
+                decoration: CustomDropdownDecoration(
+                  closedSuffixIcon: Icon(
+                    Icons.keyboard_arrow_down_outlined,
+                    color: const Color.fromARGB(255, 98, 97, 97),
                   ),
-                ],
+                  closedFillColor: white,
+                  closedBorder: Border.all(
+                      color: error_national ? Colors.red : Colors.transparent),
+                  expandedFillColor: context.scaffoldBackgroundColor,
+                  listItemStyle: primaryTextStyle(
+                    color: appStore.isDarkMode ? white : context.primaryColor,
+                  ),
+                  listItemDecoration: ListItemDecoration(
+                    selectedColor: greenColor,
+                  ),
+                  headerStyle: primaryTextStyle(
+                    color: appStore.isDarkMode
+                        ? Colors.black
+                        : context.primaryColor,
+                  ),
+                ),
+                onChanged: (value) {
+                  log('changing value to: $value');
+                  setState(() {
+                    select_country = value.toString();
+                  });
+                },
               ),
             ),
+            10.height,
             heading(context: context, text: "Passport Number"),
             customTextField(
+                error: error_passportNo,
                 context: context,
                 hintText: "Enter the number",
                 assets1: "",
+                controller: _passportController,
                 obscureText: false),
             heading(context: context, text: "Date Of Birth"),
             GestureDetector(
               onTap: () => _selectDate(context),
               child: AbsorbPointer(
                 child: customTextField(
+                  error: error_dob,
                   context: context,
                   hintText: "DD/MM/YY",
                   assets1: "",
@@ -209,6 +284,7 @@ class _Step1State extends State<Step1> {
             ),
             heading(context: context, text: "Gender"),
             genderSelection(
+              error: error_gender,
               activeColor: Colors.white,
               context: context,
               selectedGender: _selectedGender,
@@ -219,9 +295,11 @@ class _Step1State extends State<Step1> {
               },
             ),
             customDialogButton(
-              text: "Next",
-              context: context,
-            ),
+                text: "Next",
+                context: context,
+                onPressed: () {
+                  validateStep1();
+                }),
           ],
         ),
       ),

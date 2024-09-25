@@ -7,6 +7,7 @@ Widget customTextField({
   required String hintText,
   required String assets1,
   required bool obscureText,
+  bool? error,
   TextEditingController? controller,
   TextInputType keyboardType = TextInputType.text,
   String? assets2,
@@ -15,13 +16,20 @@ Widget customTextField({
   return Padding(
     padding: const EdgeInsets.only(left: 15, right: 15),
     child: Container(
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         boxShadow: [
-          BoxShadow(
-            color: AppColors.greylight,
-            offset: Offset(0, 2),
-          ),
+          error == true
+              ? BoxShadow(
+                  color: Colors.red,
+                  offset: Offset(0, 0),
+                )
+              : BoxShadow(
+                  color: AppColors.greylight,
+                  offset: Offset(0, 2),
+                )
         ],
+        border:
+            Border.all(color: error == true ? Colors.red : Colors.transparent),
         borderRadius: BorderRadius.all(Radius.circular(15)),
       ),
       child: TextFormField(
